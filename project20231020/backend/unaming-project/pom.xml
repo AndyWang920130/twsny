@@ -48,8 +48,15 @@
 			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-jpa</artifactId>
 		</dependency>
-
 		<!--QueryDSL支持-->
+
+		<!-- encrypt 支持 -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>1.69</version>
+		</dependency>
+		<!-- encrypt 支持 -->
 
 	</dependencies>
 

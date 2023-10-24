@@ -6,9 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.time.Instant;
 
 @Entity
-public class Person implements Serializable {
+public class Person extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 

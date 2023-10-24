@@ -1,4 +1,4 @@
-package com.tswny.init.service.vm;
+package com.tswny.init.web.rest.vm;
 
 public class PersonVM {
     private Long id;

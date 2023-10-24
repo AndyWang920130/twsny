@@ -1,9 +1,8 @@
 package com.tswny.init.web.rest;
 
-import com.tswny.init.domain.Person;
 import com.tswny.init.service.PersonService;
 import com.tswny.init.service.dto.PersonDTO;
-import com.tswny.init.service.vm.PersonVM;
+import com.tswny.init.web.rest.vm.PersonVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -11,8 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/persons")
