@@ -17,11 +17,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.config.QuerydslWebConfiguration;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class WebsiteService {
     private final Logger log = LoggerFactory.getLogger(WebsiteService.class);
 
