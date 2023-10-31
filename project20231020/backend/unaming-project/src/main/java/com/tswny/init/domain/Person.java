@@ -11,8 +11,6 @@ import java.time.Instant;
 @Entity
 public class Person extends AbstractAuditingEntity {
 
-    private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

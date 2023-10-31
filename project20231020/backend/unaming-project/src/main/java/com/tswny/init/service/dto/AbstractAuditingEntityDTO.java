@@ -8,10 +8,10 @@ import javax.persistence.Column;
 import java.time.Instant;
 
 public abstract class AbstractAuditingEntityDTO {
-    private String createdBy;
-    private Instant createdDate;
-    private String lastModifiedBy;
-    private Instant lastModifiedDate;
+    protected String createdBy;
+    protected Instant createdDate;
+    protected String lastModifiedBy;
+    protected Instant lastModifiedDate;
 
     public String getCreatedBy() {
         return createdBy;

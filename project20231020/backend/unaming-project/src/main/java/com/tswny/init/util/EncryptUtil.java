@@ -4,6 +4,7 @@ import com.tswny.init.service.PersonService;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.Base64Utils;
 
 import javax.crypto.Cipher;
@@ -76,6 +77,10 @@ public class EncryptUtil {
 
     public static String base64Decrypt(String encryptContent) {
         return new String(Base64Utils.decodeFromString(encryptContent));
+    }
+
+    public static String securityPasswordEncrypt(String content) {
+        return new BCryptPasswordEncoder().encode(content);
     }
 
 
