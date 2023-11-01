@@ -1,11 +1,18 @@
 package com.tswny.init.config;
 
 import com.tswny.init.filter.security.CustomTenantFilter;
+import com.tswny.init.filter.security.CustomUsernamePasswordAuthenticationFilter;
 import com.tswny.init.service.CustomUserDetailService;
 import com.tswny.init.service.UserService;
+import com.tswny.init.web.rest.PersonResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,36 +21,55 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final UserService userService;
+    private final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
-    public SecurityConfig(UserService userService) {
+    private final UserService userService;
+    private final AuthenticationConfiguration authenticationConfiguration;
+
+    public SecurityConfig(UserService userService, AuthenticationConfiguration authenticationConfiguration) {
         this.userService = userService;
+        this.authenticationConfiguration = authenticationConfiguration;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(Customizer.withDefaults())
+                .csrf()
+                .disable()
+                 // 添加用户民密码过滤器
+                .addFilterBefore(initCustomUsernamePasswordAuthenticationFilter("/api/v1/authenticate/username", HttpMethod.POST), UsernamePasswordAuthenticationFilter.class)
+                 // 添加自定义过滤器
+                .addFilterBefore(new CustomTenantFilter(), AuthorizationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers("/api/v1/authenticate/username").permitAll()
                         .antMatchers("/api/v1/users/**").permitAll()
-                        .antMatchers("/api/v1/websites/**").permitAll()
-                        .antMatchers("/api/v1/persons/**").hasRole("USER")
-                        .anyRequest().authenticated()
+                        // .antMatchers("/api/v1/websites/**").permitAll()
+                        // .antMatchers("/api/v1/persons/**").hasRole("USER")
+                        .antMatchers("/api/v1/**").authenticated()
                 )
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                // 添加自定义过滤器
-                .addFilterBefore(new CustomTenantFilter(), AuthorizationFilter.class)
                 //默认的HTTP Basic Auth认证
-                // .httpBasic(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults());
                 //默认的表单登录
-                .formLogin(Customizer.withDefaults());
+                // .formLogin(Customizer.withDefaults());
         return http.build();
+    }
+
+
+    private CustomUsernamePasswordAuthenticationFilter initCustomUsernamePasswordAuthenticationFilter(String path, HttpMethod httpMethod) {
+        CustomUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter = new CustomUsernamePasswordAuthenticationFilter();
+        customUsernamePasswordAuthenticationFilter.setAuthenticationManager(authenticationManager());
+        customUsernamePasswordAuthenticationFilter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(path, httpMethod.name()));
+
+        return customUsernamePasswordAuthenticationFilter;
     }
 
 
@@ -61,4 +87,17 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
+    @Bean
+    public AuthenticationManager authenticationManager(){
+        AuthenticationManager authenticationManager = null;
+        try {
+            authenticationManager = authenticationConfiguration.getAuthenticationManager();
+        } catch (Exception e) {
+            log.error("authenticationManager init failure");
+        }
+        return authenticationManager;
+    }
+
 }

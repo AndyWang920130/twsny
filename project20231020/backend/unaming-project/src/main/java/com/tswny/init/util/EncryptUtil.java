@@ -84,7 +84,6 @@ public class EncryptUtil {
     }
 
 
-
     /**
      * sha256对key进行摘要
      * @param key
