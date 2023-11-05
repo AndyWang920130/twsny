@@ -12,8 +12,8 @@ import javax.annotation.Resource;
 @RequestMapping("/api/v1/authenticate")
 public class UserAuthenticationResource {
 
-    @PostMapping("/username")
-    public String authenticate(@RequestParam(required = true) String username, @RequestParam(required = true) String password) {
-        return "1111";
-    }
+//    @PostMapping("/username")
+//    public String authenticate(@RequestParam(required = true) String username, @RequestParam(required = true) String password) {
+//        return "1111";
+//    }
 }

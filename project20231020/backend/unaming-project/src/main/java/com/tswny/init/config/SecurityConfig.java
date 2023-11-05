@@ -2,9 +2,12 @@ package com.tswny.init.config;
 
 import com.tswny.init.filter.security.CustomTenantFilter;
 import com.tswny.init.filter.security.CustomUsernamePasswordAuthenticationFilter;
+import com.tswny.init.filter.security.JwtFilter;
 import com.tswny.init.service.CustomUserDetailService;
 import com.tswny.init.service.UserService;
+import com.tswny.init.util.JwtTokenUtil;
 import com.tswny.init.web.rest.PersonResource;
+import net.minidev.json.JSONAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -16,19 +19,26 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import javax.servlet.ServletOutputStream;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     private final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
+    private final String loginProcessingUrl = "/api/v1/authenticate/username";
     private final UserService userService;
     private final AuthenticationConfiguration authenticationConfiguration;
 
@@ -43,13 +53,14 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                  // 添加用户民密码过滤器
-                .addFilterBefore(initCustomUsernamePasswordAuthenticationFilter("/api/v1/authenticate/username", HttpMethod.POST), UsernamePasswordAuthenticationFilter.class)
+                // .addFilterBefore(initCustomUsernamePasswordAuthenticationFilter("/api/v1/authenticate/username", HttpMethod.POST), UsernamePasswordAuthenticationFilter.class)
                  // 添加自定义过滤器
                 .addFilterBefore(new CustomTenantFilter(), AuthorizationFilter.class)
+                .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers("/api/v1/authenticate/username").permitAll()
+                        // .antMatchers("/api/v1/authenticate/username").permitAll()
                         .antMatchers("/api/v1/users/**").permitAll()
-                        // .antMatchers("/api/v1/websites/**").permitAll()
+                        .antMatchers("/api/v1/websites/**").permitAll()
                         // .antMatchers("/api/v1/persons/**").hasRole("USER")
                         .antMatchers("/api/v1/**").authenticated()
                 )
@@ -57,9 +68,16 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 //默认的HTTP Basic Auth认证
-                .httpBasic(Customizer.withDefaults());
+                .httpBasic(Customizer.withDefaults())
                 //默认的表单登录
-                // .formLogin(Customizer.withDefaults());
+                // .formLogin(Customizer.withDefaults())
+                .formLogin()
+                // 触发登录校验
+                .loginProcessingUrl(loginProcessingUrl)
+                .successHandler(successHandler());
+//                .failureHandler()
+                // 成功后跳转页面
+                // .defaultSuccessUrl("/index.html");
         return http.build();
     }
 
@@ -98,6 +116,26 @@ public class SecurityConfig {
             log.error("authenticationManager init failure");
         }
         return authenticationManager;
+    }
+
+
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+        return (request, response, authentication) -> {
+            response.setContentType("application/json;charset=UTF-8");
+            //登录成功后获取当前登录用户
+            Authentication authentication1 = SecurityContextHolder.getContext().getAuthentication();
+//            UserDetail userDetail = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//            log.info("用户[{}]于[{}]登录成功!", userDetail.getUser().getUsername(), new Date());
+//            WriteResponse.write(httpServletResponse, new SuccessResponse());
+            String token = JwtTokenUtil.getInstance().createToken(authentication.getPrincipal().toString(), false);
+            // String result = JSON.toJSONString(loginResult, SerializerFeature.DisableCircularReferenceDetect);
+
+            ServletOutputStream outputStream = response.getOutputStream();
+            outputStream.write(token.getBytes(StandardCharsets.UTF_8));
+            outputStream.flush();
+            outputStream.close();
+        };
     }
 
 }
