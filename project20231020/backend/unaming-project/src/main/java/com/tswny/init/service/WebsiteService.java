@@ -6,6 +6,7 @@ import com.tswny.init.domain.Person;
 import com.tswny.init.domain.QPerson;
 import com.tswny.init.domain.QWebsite;
 import com.tswny.init.domain.Website;
+import com.tswny.init.handler.exception.BadRequestException;
 import com.tswny.init.repository.WebsiteRepository;
 import com.tswny.init.service.dto.PersonDTO;
 import com.tswny.init.service.dto.WebsiteDTO;
@@ -59,6 +60,7 @@ public class WebsiteService {
         Optional<Website> webSiteOptional = websiteRepository.findById(id);
         if (!webSiteOptional.isPresent()) {
             log.error("can not find website by id: {}", id);
+            return null;
         }
         Website website = webSiteOptional.get();
 
@@ -84,6 +86,7 @@ public class WebsiteService {
         Optional<Website> webSiteOptional = websiteRepository.findById(id);
         if (!webSiteOptional.isPresent()) {
             log.error("can not find website by id: {}", id);
+            throw new BadRequestException("/findById", "can not find website by id: " + id);
         }
         Website website = webSiteOptional.get();
         return new WebsiteDTO(website);

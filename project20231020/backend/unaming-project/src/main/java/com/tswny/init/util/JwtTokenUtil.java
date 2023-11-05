@@ -43,8 +43,8 @@ public class JwtTokenUtil {
         return instance;
     }
 
-    public String createToken(String username, boolean rememberMe) {
-        String authorities = username + ";" + Instant.now();
+    public String createToken(Authentication authentication, boolean rememberMe) {
+        String authorities = authentication.getPrincipal() + ";" + Instant.now();
         long now = (new Date()).getTime();
         Date validity;
         if (rememberMe) {
@@ -54,7 +54,7 @@ public class JwtTokenUtil {
         }
 
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)

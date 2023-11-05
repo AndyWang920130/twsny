@@ -6,12 +6,11 @@ import com.tswny.init.filter.security.JwtFilter;
 import com.tswny.init.service.CustomUserDetailService;
 import com.tswny.init.service.UserService;
 import com.tswny.init.util.JwtTokenUtil;
-import com.tswny.init.web.rest.PersonResource;
-import net.minidev.json.JSONAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -19,8 +18,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,22 +26,26 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 import javax.servlet.ServletOutputStream;
 import java.nio.charset.StandardCharsets;
 
 @Configuration
 @EnableWebSecurity
+@Import(SecurityProblemSupport.class)
 public class SecurityConfig {
     private final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
     private final String loginProcessingUrl = "/api/v1/authenticate/username";
     private final UserService userService;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final SecurityProblemSupport securityProblemSupport;
 
-    public SecurityConfig(UserService userService, AuthenticationConfiguration authenticationConfiguration) {
+    public SecurityConfig(UserService userService, AuthenticationConfiguration authenticationConfiguration, SecurityProblemSupport securityProblemSupport) {
         this.userService = userService;
         this.authenticationConfiguration = authenticationConfiguration;
+        this.securityProblemSupport = securityProblemSupport;
     }
 
     @Bean
@@ -57,6 +58,10 @@ public class SecurityConfig {
                  // 添加自定义过滤器
                 .addFilterBefore(new CustomTenantFilter(), AuthorizationFilter.class)
                 .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling()
+                .authenticationEntryPoint(securityProblemSupport)
+                .accessDeniedHandler(securityProblemSupport)
+                .and()
                 .authorizeHttpRequests(authorize -> authorize
                         // .antMatchers("/api/v1/authenticate/username").permitAll()
                         .antMatchers("/api/v1/users/**").permitAll()
@@ -124,11 +129,11 @@ public class SecurityConfig {
         return (request, response, authentication) -> {
             response.setContentType("application/json;charset=UTF-8");
             //登录成功后获取当前登录用户
-            Authentication authentication1 = SecurityContextHolder.getContext().getAuthentication();
+//            Authentication authentication1 = SecurityContextHolder.getContext().getAuthentication();
 //            UserDetail userDetail = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //            log.info("用户[{}]于[{}]登录成功!", userDetail.getUser().getUsername(), new Date());
 //            WriteResponse.write(httpServletResponse, new SuccessResponse());
-            String token = JwtTokenUtil.getInstance().createToken(authentication.getPrincipal().toString(), false);
+            String token = JwtTokenUtil.getInstance().createToken(authentication, false);
             // String result = JSON.toJSONString(loginResult, SerializerFeature.DisableCircularReferenceDetect);
 
             ServletOutputStream outputStream = response.getOutputStream();
