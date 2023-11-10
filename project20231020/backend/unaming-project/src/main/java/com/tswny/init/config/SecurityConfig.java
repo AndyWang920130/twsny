@@ -25,7 +25,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 import javax.servlet.ServletOutputStream;
@@ -42,6 +46,8 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final SecurityProblemSupport securityProblemSupport;
 
+
+
     public SecurityConfig(UserService userService, AuthenticationConfiguration authenticationConfiguration, SecurityProblemSupport securityProblemSupport) {
         this.userService = userService;
         this.authenticationConfiguration = authenticationConfiguration;
@@ -57,29 +63,38 @@ public class SecurityConfig {
                 // .addFilterBefore(initCustomUsernamePasswordAuthenticationFilter("/api/v1/authenticate/username", HttpMethod.POST), UsernamePasswordAuthenticationFilter.class)
                  // 添加自定义过滤器
                 .addFilterBefore(new CustomTenantFilter(), AuthorizationFilter.class)
+                .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
-                .authenticationEntryPoint(securityProblemSupport)
-                .accessDeniedHandler(securityProblemSupport)
+                    .authenticationEntryPoint(securityProblemSupport)
+                    .accessDeniedHandler(securityProblemSupport)
                 .and()
-                .authorizeHttpRequests(authorize -> authorize
-                        // .antMatchers("/api/v1/authenticate/username").permitAll()
-                        .antMatchers("/api/v1/users/**").permitAll()
-                        .antMatchers("/api/v1/websites/**").permitAll()
-                        // .antMatchers("/api/v1/persons/**").hasRole("USER")
-                        .antMatchers("/api/v1/**").authenticated()
-                )
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .headers()
+                    .contentSecurityPolicy("default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';")
                 .and()
-                //默认的HTTP Basic Auth认证
-                .httpBasic(Customizer.withDefaults())
-                //默认的表单登录
-                // .formLogin(Customizer.withDefaults())
-                .formLogin()
-                // 触发登录校验
-                .loginProcessingUrl(loginProcessingUrl)
-                .successHandler(successHandler());
+                    .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
+                .and()
+                    .frameOptions()
+                    .deny()
+                .and()
+                    .authorizeHttpRequests(authorize -> authorize
+                            // .antMatchers("/api/v1/authenticate/username").permitAll()
+                            .antMatchers("/api/v1/users/**").permitAll()
+                            .antMatchers("/api/v1/websites/**").permitAll()
+                            // .antMatchers("/api/v1/persons/**").hasRole("USER")
+                            .antMatchers("/api/v1/**").authenticated()
+                    )
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                    //默认的HTTP Basic Auth认证
+                    .httpBasic(Customizer.withDefaults())
+                    //默认的表单登录
+                    // .formLogin(Customizer.withDefaults())
+                    .formLogin()
+                    // 触发登录校验
+                    .loginProcessingUrl(loginProcessingUrl)
+                    .successHandler(successHandler());
 //                .failureHandler()
                 // 成功后跳转页面
                 // .defaultSuccessUrl("/index.html");
@@ -141,6 +156,41 @@ public class SecurityConfig {
             outputStream.flush();
             outputStream.close();
         };
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        CorsConfiguration config = new CorsConfiguration();
+//        if (config.getAllowedOrigins() != null && !config.getAllowedOrigins().isEmpty()) {
+//            log.debug("Registering CORS filter");
+//            source.registerCorsConfiguration("/api/**", config);
+//            source.registerCorsConfiguration("/management/**", config);
+//        }
+//        return new CorsFilter(source);
+
+
+        //1. 添加 CORS配置信息
+        CorsConfiguration config = new CorsConfiguration();
+        //放行哪些原始域
+        config.addAllowedOrigin("*");
+        //是否发送 Cookie
+        // config.setAllowCredentials(true);
+        //放行哪些请求方式
+        config.addAllowedMethod("*");
+        //放行哪些原始请求头部信息
+        config.addAllowedHeader("*");
+        //暴露哪些头部信息
+        config.addExposedHeader("*");
+
+        //2. 添加映射路径
+        UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        corsConfigurationSource.registerCorsConfiguration("/**",config);
+        corsConfigurationSource.registerCorsConfiguration("/management/**", config);
+//        corsConfigurationSource.registerCorsConfiguration("/api/**",config);
+//        corsConfigurationSource.registerCorsConfiguration("/management/**", config);
+
+        return new CorsFilter(corsConfigurationSource);
     }
 
 }
