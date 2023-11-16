@@ -8,12 +8,60 @@ import { request } from '../request/request'
 //     });
 // };
 
+// export const getWebsites = () => {
+//     request({
+//         url: '/websites',
+//         method: 'get'
+//     }).then(response => {
+//         console.log(response)
+//         console.log(response.data)
+//         console.log(response.data.content)
+//         return response
+//     })
+// };
+
+
 export const getWebsites = () => {
-    request({
+    return request({
         url: '/websites',
         method: 'get'
-    }).then(response => {
-        console.log(response)
-        return response
     })
 };
+
+export const addWebsite = (data) => {
+    return request({
+        url: '/websites',
+        method: 'post',
+        data: data
+    })
+};
+
+export const deleteWebsite = (paramSuffix) => {
+    return request({
+        url: '/websites' + paramSuffix,
+        method: 'delete',
+    })
+};
+
+// export const deleteWebsite = (params) => {
+//     return request({
+//         url: '/websites',
+//         method: 'delete',
+//         params: params
+//     })
+// };
+
+// params: {
+//     id: 123
+// }
+// export const addWebsites = (params) => {
+//     return request({
+//         url: '/websites',
+//         method: 'get',
+//         data: params
+//     })
+// };
+
+
+
+

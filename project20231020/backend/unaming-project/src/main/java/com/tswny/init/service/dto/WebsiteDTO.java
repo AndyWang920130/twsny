@@ -18,6 +18,7 @@ public class WebsiteDTO extends AbstractAuditingEntityDTO{
     private String directory;
 
     public WebsiteDTO(Website website) {
+        this.setId(website.getId());
         String url = website.getUrl();
         if (!StringUtils.isNullOrEmpty(url)) {
             this.setUrl(EncryptUtil.base64Decrypt(url));

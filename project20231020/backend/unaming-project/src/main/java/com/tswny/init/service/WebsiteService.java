@@ -44,7 +44,7 @@ public class WebsiteService {
         website.setPassword(websiteVM.getPassword());
         website.setDescription(websiteVM.getDescription());
         website.setDirectory(websiteVM.getDirectory());
-        website.setCreatedBy(websiteVM.getCreatedBy());
+        website.setCreatedBy("system");
         website.setCreatedDate(Instant.now());
         website.setLastModifiedBy(websiteVM.getCreatedBy());
         website.setLastModifiedDate(Instant.now());
