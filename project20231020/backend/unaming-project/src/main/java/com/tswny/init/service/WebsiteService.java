@@ -35,6 +35,15 @@ public class WebsiteService {
     }
 
     public WebsiteDTO create(WebsiteVM websiteVM) {
+//        Website website;
+//        Long id = websiteVM.getId();
+//        if (id != null) {
+//            Optional<Website> webSiteOptional = websiteRepository.findById(id);
+//            if (!webSiteOptional.isPresent()) throw new BadRequestException("/create", "can not find website by id: " + id);
+//            website = webSiteOptional.get();
+//        }  else {
+//            website = new Website();
+//        }
         Website website = new Website();
         String url = websiteVM.getUrl();
         if (!StringUtils.isNullOrEmpty(url)) {

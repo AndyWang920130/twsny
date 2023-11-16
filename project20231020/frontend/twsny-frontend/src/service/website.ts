@@ -36,6 +36,15 @@ export const addWebsite = (data) => {
     })
 };
 
+export const updateWebsite = (data) => {
+    return request({
+        url: '/websites',
+        method: 'put',
+        data: data
+    })
+};
+
+
 export const deleteWebsite = (paramSuffix) => {
     return request({
         url: '/websites' + paramSuffix,

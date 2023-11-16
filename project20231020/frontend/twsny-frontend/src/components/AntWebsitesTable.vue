@@ -40,7 +40,7 @@ import { computed, reactive, ref } from 'vue';
 import type { Ref, UnwrapRef } from 'vue';
 import { CheckOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { cloneDeep } from 'lodash-es';
-import { getWebsites, addWebsite, deleteWebsite } from "../service/website"
+import { getWebsites, addWebsite, updateWebsite, deleteWebsite } from "../service/website"
 
 interface DataItem {
   key: number,
@@ -119,9 +119,16 @@ const edit = (key: number) => {
 const save = (key: number) => {
   Object.assign(dataSource.value.filter(item => key === item.key)[0], editableData[key]);
   const websiteItem = editableData[key];
-  addWebsite(websiteItem).then(response => {
+  if (websiteItem.id) {
+    updateWebsite(websiteItem).then(response => {
+      console.log("update website obj successfully")
+    })
+  } else {
+    addWebsite(websiteItem).then(response => {
       console.log("save website obj successfully")
-  })
+    })
+  }
+
   delete editableData[key];
 };
 
