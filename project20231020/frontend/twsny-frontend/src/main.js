@@ -4,9 +4,9 @@ import 'ant-design-vue/dist/reset.css';
 import { createApp } from 'vue'
 import { message } from 'ant-design-vue';
 
-import App from './App.vue'
+import App from './app.vue'
 import App1 from './App1.vue'
-import App2 from './App2.vue'
+import App2 from './app2.vue'
 import Persons from './Persons.vue'
 import FetchData from './FetchData.vue'
 import WebsitesTable from './WebsitesTable.vue'
