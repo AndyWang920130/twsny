@@ -12,10 +12,33 @@ let process = {
 
 }
 
+// @ts-ignore
+const apiUrl = import.meta.env.VITE_VUE_APP_API_URL
+// @ts-ignore
+console.log('import', import.meta)
+// @ts-ignore
+console.log('import.BASE_URL', import.meta.env.BASE_URL)
+// @ts-ignore
+console.log('import.env.MODE', import.meta.env.MODE)
+// @ts-ignore
+console.log('import.env.PROD', import.meta.env.PROD)
+// @ts-ignore
+console.log('import.env.DEV', import.meta.env.DEV)
+// @ts-ignore
+console.log("VITE_APP_TITLE:" + import.meta.env.VITE_APP_TITLE)
+// @ts-ignore
+console.log("VUE_APP_API_URL:" + import.meta.env.VUE_APP_API_URL)
+// @ts-ignore
+console.log("VITE_VUE_APP_API_URL:" + import.meta.env.VITE_VUE_APP_API_URL)
+
+
+console.log("apiUrl: " + apiUrl)
+
 const instance = axios.create({
     // baseURL: "http://211.149.248.84:8081",
-    baseURL: process.env.VUE_APP_TEST_BASE_API,
     // baseURL: process.env.VUE_APP_TEST_BASE_API,
+    // baseURL: process.env.VUE_APP_TEST_BASE_API,
+    baseURL: apiUrl,
     timeout: 3500,  //响应时间
     headers: {}
 })

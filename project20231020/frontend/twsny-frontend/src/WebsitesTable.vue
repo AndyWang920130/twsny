@@ -27,6 +27,7 @@ const gridData =  ref('')
 getWebsites().then(response => {
   gridData.value = response.data.content
 })
+
 </script>
 
 <template>
