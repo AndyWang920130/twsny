@@ -13,9 +13,10 @@ import WebsitesTable from './WebsitesTable.vue'
 import Layout from './components/Layout.vue'
 import Card1 from './components/Card.vue'
 import AntWebsitesTable from './components/AntWebsitesTable.vue'
+import Router from './components/Router.vue'
 
 let app;
-// createApp(App).mount('#app')
+app = createApp(App)
 // createApp(App1).mount('#app')
 // createApp(App2).mount('#app')
 // createApp(Persons).mount('#app')
@@ -23,7 +24,8 @@ let app;
 // app = createApp(WebsitesTable)
 // app = createApp(Layout)
 // app = createApp(Card1)
-app = createApp(AntWebsitesTable)
+// app = createApp(AntWebsitesTable)
+// app = createApp(Router)
 
 /* 会自动注册 Button 下的子组件, 例如 Button.Group */
 app.mount('#app')
