@@ -5,12 +5,21 @@ import Card from './Card.vue'
 import AntWebsitesTable from './AntWebsitesTable.vue'
 import NotFound from './AntWebsitesTable.vue'
 
+// const props = defineProps(['routerPath'])
+// console.log("routerPath: " + props.routerPath)
+
+// const routes = {
+//   '/': HelloWord,
+//   '/Card': Card,
+//   '/AntWebsitesTable': AntWebsitesTable
+// }
+
 const routes = {
   '/': HelloWord,
-  '/Card': Card,
-  '/AntWebsitesTable': AntWebsitesTable
+  '/websites': AntWebsitesTable
 }
 
+// window.location.href = props
 const currentPath = ref(window.location.hash)
 
 window.addEventListener('hashchange', () => {
@@ -23,9 +32,9 @@ const currentView = computed(() => {
 </script>
 
 <template>
-  <a href="#/">HelloWord</a> |
-  <a href="#/Card">Card</a> |
-  <a href="#/AntWebsitesTable">AntWebsitesTable</a>
+<!--  <a href="#/">HelloWord</a> |-->
+<!--  <a href="#/Card">Card</a> |-->
+<!--  <a href="#/AntWebsitesTable">AntWebsitesTable</a>-->
   <component :is="currentView" />
 </template>
 
