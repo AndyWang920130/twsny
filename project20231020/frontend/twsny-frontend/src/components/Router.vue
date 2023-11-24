@@ -3,6 +3,9 @@ import { ref, computed } from 'vue'
 import HelloWord from './HelloWorld.vue'
 import Card from './Card.vue'
 import AntWebsitesTable from './AntWebsitesTable.vue'
+import Zelda from './entertainment/game/zelda/Zelda.vue'
+import Cooking from './Cooking.vue'
+import Clothes from './Clothes.vue'
 import NotFound from './AntWebsitesTable.vue'
 
 // const props = defineProps(['routerPath'])
@@ -16,7 +19,10 @@ import NotFound from './AntWebsitesTable.vue'
 
 const routes = {
   '/': HelloWord,
-  '/websites': AntWebsitesTable
+  '/websites': AntWebsitesTable,
+  '/zelda': Zelda,
+  '/cooking': Cooking,
+  '/clothes': Clothes
 }
 
 // window.location.href = props
@@ -32,14 +38,8 @@ const currentView = computed(() => {
 </script>
 
 <template>
-<!--  <a href="#/">HelloWord</a> |-->
-<!--  <a href="#/Card">Card</a> |-->
-<!--  <a href="#/AntWebsitesTable">AntWebsitesTable</a>-->
   <component :is="currentView" />
 </template>
 
 <style lang="less" scoped>
-//button, a {
-//  display: inline;
-//}
 </style>

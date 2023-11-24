@@ -66,8 +66,11 @@ const navMenuKey = {
 }
 
 const path = {
-  "root":"/",
-  "websites": "/websites",
+  root:"/",
+  websites: "/websites",
+  zelda: "/zelda",
+  cooking: "/cooking",
+  clothes: "/clothes",
 }
 
 const navKeyMap = new Map()
@@ -104,13 +107,19 @@ const lifeSubNavMenuItems = reactive([
         key: 'lifeSub1_children1',
         label: '美食',
         title: '美食',
-        url: path.root
+        url: path.cooking
       },
       {
         key: 'lifeSub1_children2',
         label: '园艺',
         title: '园艺',
         url: path.root
+      },
+      {
+        key: 'lifeSub1_children3',
+        label: '衣橱',
+        title: '衣橱',
+        url: path.clothes
       },
     ]
   },
@@ -209,6 +218,7 @@ const entertainmentSubNavMenuItems = reactive([
             key: 'entertainmentSub1_children2',
             label: '塞尔达',
             title: '塞尔达',
+            url: path.zelda
           },
         ]
       },
