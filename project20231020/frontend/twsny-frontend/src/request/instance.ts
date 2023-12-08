@@ -4,13 +4,13 @@ import axios from 'axios'
 //     env: {VUE_APP_BASE_API : "http://localhost:8080/api/v1"}
 // }
 
-let process = {
-    env: {
-        VUE_APP_TEST_BASE_API : "http://211.149.248.84:8080/api/v1",
-        VUE_APP_DEV_BASE_API : "http://localhost:8080/api/v1",
-    }
-
-}
+// let process = {
+//     env: {
+//         VUE_APP_TEST_BASE_API : "http://211.149.248.84:8080/api/v1",
+//         VUE_APP_DEV_BASE_API : "http://localhost:8080/api/v1",
+//     }
+//
+// }
 
 // @ts-ignore
 const apiUrl = import.meta.env.VITE_VUE_APP_API_URL
@@ -51,7 +51,8 @@ instance.interceptors.request.use(
         return config
     }, err => {
         // @ts-ignore
-        Promise.reject(err).then(r => console.log(r))
+        // Promise.reject(err).then(r => console.log(r))
+        return Promise.reject(err)
     }
 )
 //响应拦截器
@@ -60,7 +61,8 @@ instance.interceptors.response.use(
         return response
     }, err => {
         // @ts-ignore
-        Promise.reject(err).then(r => console.log(r))
+        // Promise.reject(err).then(r => console.log(r))
+        return Promise.reject(err)
     }
 )
 

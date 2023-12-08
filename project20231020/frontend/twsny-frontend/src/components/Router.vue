@@ -5,7 +5,7 @@ import Card from './Card.vue'
 import AntWebsitesTable from './AntWebsitesTable.vue'
 import Zelda from './entertainment/game/zelda/Zelda.vue'
 import Cooking from './Cooking.vue'
-import Clothes from './Clothes.vue'
+import Clothes from './life/home/clothes/Clothes.vue'
 import NotFound from './AntWebsitesTable.vue'
 
 // const props = defineProps(['routerPath'])

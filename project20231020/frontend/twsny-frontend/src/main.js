@@ -14,10 +14,14 @@ import Layout from './components/Layout.vue'
 import Card1 from './components/Card.vue'
 import AntWebsitesTable from './components/AntWebsitesTable.vue'
 import Router from './components/Router.vue'
+import Add from './components/Add.vue'
+import Image from './components/common/FileUpload.vue'
+import FileUploadTest from './components/FileUploadTest.vue'
+
+
 
 let app;
 app = createApp(App)
-// createApp(App1).mount('#app')
 // createApp(App2).mount('#app')
 // createApp(Persons).mount('#app')
 // createApp(FetchData).mount('#app')
@@ -26,6 +30,10 @@ app = createApp(App)
 // app = createApp(Card1)
 // app = createApp(AntWebsitesTable)
 // app = createApp(Router)
+// app = createApp(Add)
+// app = createApp(Image)
+// app = createApp(FileUploadTest)
+app = createApp(App1)
 
 /* 会自动注册 Button 下的子组件, 例如 Button.Group */
 app.mount('#app')

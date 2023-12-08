@@ -81,6 +81,8 @@ public class SecurityConfig {
                             // .antMatchers("/api/v1/authenticate/username").permitAll()
                             .antMatchers("/api/v1/users/**").permitAll()
                             .antMatchers("/api/v1/websites/**").permitAll()
+                            .antMatchers("/api/v1/clothes/**").permitAll()
+                            .antMatchers("/api/v1/upload/common/**").permitAll()
                             // .antMatchers("/api/v1/persons/**").hasRole("USER")
                             .antMatchers("/api/v1/**").authenticated()
                     )
@@ -185,7 +187,7 @@ public class SecurityConfig {
 
         //2. 添加映射路径
         UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        corsConfigurationSource.registerCorsConfiguration("/**",config);
+        corsConfigurationSource.registerCorsConfiguration("/**", config);
         corsConfigurationSource.registerCorsConfiguration("/management/**", config);
 //        corsConfigurationSource.registerCorsConfiguration("/api/**",config);
 //        corsConfigurationSource.registerCorsConfiguration("/management/**", config);
