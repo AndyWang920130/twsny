@@ -1,5 +1,7 @@
 // @ts-ignore
 import { request } from '../request/request'
+// @ts-ignore
+import { ClothesAddVM } from '../components/life/home/clothes/ClothesVM'
 
 export const getClothesList = () => {
     return request({
@@ -16,7 +18,7 @@ export const getClothes = (id: number) => {
     })
 };
 
-export const addClothes = (data) => {
+export const addClothes = (data: ClothesAddVM) => {
     return request({
         url: '/clothes',
         method: 'post',

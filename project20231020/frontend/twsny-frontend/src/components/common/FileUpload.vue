@@ -26,20 +26,16 @@ import type { UploadProps } from 'ant-design-vue';
 import type { UploadChangeParam } from 'ant-design-vue';
 import { message } from 'ant-design-vue';
 import {uploadFile} from "../../service/clothes";
-
-
-interface FileItem {
-  id: number,
-  name: string,
-  url: string,
-  status: string
-}
+import {FileItem} from "../../definition/FormData"
 
 interface FileUploadProp {
   fileList: Array<FileItem>;
 }
 const fileUploadProp = defineProps<FileUploadProp>()
-const fileList = ref<UploadProps['fileList']>(fileUploadProp.fileList)
+// const fileList = ref<UploadProps['fileList']>(fileUploadProp.fileList)
+const fileList : Ref<FileItem[]> = ref(fileUploadProp.fileList)
+
+// const fileList = fileUploadProp.fileList
 
 function getBase64(file: File) {
   return new Promise((resolve, reject) => {
@@ -105,12 +101,15 @@ const upload = (file : UploadProps['fileList'][number]) => {
     uploadFile(file)
         .then((res) => {
           // console.log(res, res.status)
-          message.info('Upload file successful')})
+          message.info('Upload file successful')
+          file.url = res.data
           fileList.value.push(file)
+          // fileList.push(file)
+        })
         .catch((error) => {
           // console.error(error)
           // console.log("Upload file failure: " + error.message)
-          message.error('Upload file failure')
+          message.error('Upload file failure: ' + error.message)
         })
   })
       .then((res) => {

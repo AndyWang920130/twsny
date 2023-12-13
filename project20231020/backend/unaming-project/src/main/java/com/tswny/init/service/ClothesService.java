@@ -3,7 +3,10 @@ package com.tswny.init.service;
 import com.querydsl.core.util.StringUtils;
 import com.tswny.init.domain.clothes.Clothes;
 import com.tswny.init.domain.clothes.QClothes;
+import com.tswny.init.repository.BrandRepository;
 import com.tswny.init.repository.ClothesRepository;
+import com.tswny.init.web.rest.BrandResource;
+import com.tswny.init.web.rest.vm.ClothesVM;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -26,6 +29,8 @@ public class ClothesService {
     @Resource
     private ClothesRepository clothesRepository;
 
+    @Resource
+    private BrandRepository brandRepository;
     /**
      * 通过ID查询单条数据
      *
@@ -54,10 +59,18 @@ public class ClothesService {
     /**
      * 新增数据
      *
-     * @param clothes 实例对象
+     * @param clothesVM 实例对象
      * @return 实例对象
      */
-    public Clothes insert(Clothes clothes) {
+    public Clothes insert(ClothesVM clothesVM) {
+        Clothes clothes = new Clothes();
+        clothes.setId(clothesVM.getId());
+        clothes.setName(clothesVM.getName());
+        if (clothesVM.getBrandId() != null) clothes.setBrand(brandRepository.findById(clothesVM.getBrandId()).orElse(null));
+        clothes.setPrice(clothesVM.getPrice());
+        clothes.setClothesTypeEnum(clothesVM.getClothesType());
+        clothes.setPurchaseDate(clothesVM.getPurchaseDate());
+        clothes.setImagePaths(String.join(";", clothesVM.getImagePaths()));
         return this.clothesRepository.save(clothes);
     }
 

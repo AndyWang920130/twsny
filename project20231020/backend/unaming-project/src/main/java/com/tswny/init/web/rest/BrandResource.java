@@ -4,6 +4,9 @@ import com.tswny.init.domain.clothes.Brand;
 import com.tswny.init.service.BrandService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +19,7 @@ import javax.annotation.Resource;
  * @since 2023-12-05 11:01:07
  */
 @RestController
-@RequestMapping("brand")
+@RequestMapping("/api/v1/brands")
 public class BrandResource {
     /**
      * 服务对象
@@ -27,13 +30,12 @@ public class BrandResource {
     /**
      * 分页查询
      *
-     * @param brand 筛选条件
-     * @param pageRequest      分页对象
      * @return 查询结果
      */
     @GetMapping
-    public ResponseEntity<Page<Brand>> queryByPage(Brand brand, PageRequest pageRequest) {
-        return ResponseEntity.ok(this.brandService.queryByPage(brand, pageRequest));
+    public ResponseEntity<Page<Brand>> queryByPage(@RequestParam(required = false) String keyword,
+                                                   @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(this.brandService.queryByPage(keyword, pageable));
     }
 
     /**

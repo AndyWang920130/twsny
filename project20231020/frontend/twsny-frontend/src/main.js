@@ -16,6 +16,7 @@ import AntWebsitesTable from './components/AntWebsitesTable.vue'
 import Router from './components/Router.vue'
 import Add from './components/Add.vue'
 import Image from './components/common/FileUpload.vue'
+import Modal from './components/common/modal.vue'
 import FileUploadTest from './components/FileUploadTest.vue'
 
 
@@ -33,7 +34,8 @@ app = createApp(App)
 // app = createApp(Add)
 // app = createApp(Image)
 // app = createApp(FileUploadTest)
-app = createApp(App1)
+// app = createApp(App1)
+// app = createApp(Modal)
 
 /* 会自动注册 Button 下的子组件, 例如 Button.Group */
 app.mount('#app')

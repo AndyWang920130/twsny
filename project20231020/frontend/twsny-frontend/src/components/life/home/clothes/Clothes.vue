@@ -34,6 +34,7 @@
       </template>
     </template>
   </a-table>
+  <ClothesAdd :open="clotheAddModalOpen" @dialog-cancel="dialogCancel" @cancel="dialogCancel"></ClothesAdd>
 </template>
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue';
@@ -41,6 +42,10 @@ import type { Ref, UnwrapRef } from 'vue';
 import { CheckOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { cloneDeep } from 'lodash-es';
 import {getClothesList, getClothes, addClothes, updateClothes, deleteClothes} from "../../../../service/clothes";
+import ClothesAdd from "./ClothesAdd.vue";
+import {message} from "ant-design-vue";
+
+const clotheAddModalOpen = ref<boolean>(false);
 interface DataItem {
   key: number,
   id: number;
@@ -136,8 +141,18 @@ const handleAdd = () => {
   //   description: `baidu ${dataIndex}`,
   // };
   // dataSource.value.push(newData);
-  alert("need to complete")
+  // alert("need to complete")
+  clotheAddModalOpen.value = true
 };
+
+// const dialogConfirm = (e) => {
+//   clotheAddModalOpen.value = false
+// }
+
+const dialogCancel = (e) => {
+  clotheAddModalOpen.value = false
+}
+
 </script>
 <style lang="less" scoped>
 .editable-cell {

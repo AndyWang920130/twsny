@@ -3,6 +3,7 @@ package com.tswny.init.domain.clothes;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tswny.init.domain.AbstractAuditingEntity;
 import com.tswny.init.domain.enumeration.ClothesTypeEnum;
+import com.tswny.init.web.rest.vm.ClothesVM;
 
 import javax.persistence.*;
 import java.time.Instant;

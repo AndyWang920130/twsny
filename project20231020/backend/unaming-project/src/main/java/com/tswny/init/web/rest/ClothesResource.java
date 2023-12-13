@@ -2,6 +2,7 @@ package com.tswny.init.web.rest;
 
 import com.tswny.init.domain.clothes.Clothes;
 import com.tswny.init.service.ClothesService;
+import com.tswny.init.web.rest.vm.ClothesVM;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -56,7 +57,7 @@ public class ClothesResource {
      * @return 新增结果
      */
     @PostMapping
-    public ResponseEntity<Clothes> add(Clothes clothes) {
+    public ResponseEntity<Clothes> add(@RequestBody ClothesVM clothes) {
         return ResponseEntity.ok(this.clothesService.insert(clothes));
     }
 

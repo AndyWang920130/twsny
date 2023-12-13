@@ -1,7 +1,10 @@
 package com.tswny.init.service;
 
+import com.querydsl.core.util.StringUtils;
 import com.tswny.init.domain.clothes.Brand;
+import com.tswny.init.domain.clothes.QBrand;
 import com.tswny.init.repository.BrandRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,13 +39,16 @@ public class BrandService {
     /**
      * 分页查询
      *
-     * @param brand 筛选条件
-     * @param pageRequest      分页对象
      * @return 查询结果
      */
-    public Page<Brand> queryByPage(Brand brand, PageRequest pageRequest) {
+    public Page<Brand> queryByPage(String keyword, Pageable pageable) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-        return this.brandRepository.findAll(booleanBuilder, pageRequest);
+        QBrand qBrand  = QBrand.brand;
+        if (!StringUtils.isNullOrEmpty(keyword)) {
+            booleanBuilder.andAnyOf(qBrand.name.like("%" + keyword + "%"),
+                    qBrand.country.like("%" + keyword + "%"));
+        }
+        return this.brandRepository.findAll(booleanBuilder, pageable);
     }
 
     /**

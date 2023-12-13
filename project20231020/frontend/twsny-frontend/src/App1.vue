@@ -5,47 +5,9 @@
 import {reactive, Ref, ref, UnwrapRef} from 'vue'
 import Add from './components/common/Add.vue'
 import dayjs, {Dayjs} from "dayjs";
+import {Item, FileItem} from "./definition/FormData"
 
-// interface Item {
-//   name: string;
-//   region: string | undefined;
-//   date1: Dayjs | undefined;
-//   delivery: boolean;
-//   type: string[];
-//   resource: string;
-//   desc: string;
-// }
-
-// const props2: UnwrapRef<Item> = reactive({
-//   name: '12233',
-//   region: undefined,
-//   date1: undefined,
-//   delivery: false,
-//   type: ['2'],
-//   resource: '2',
-//   desc: '',
-// });
 const dateFormat = 'YYYY/MM/DD hh:mm:ss';
-interface Item {
-  label: string;
-  type: string;
-  placeholder: string;
-  options?: Array<SelectOption> | undefined;
-  value: string | dayjs | Array<String> | Array<FileItem>;
-}
-
-interface SelectOption {
-  label: string;
-  value: string;
-}
-
-interface FileItem {
-  id: number,
-  name: string,
-  url?: string,
-  status: string,
-  percent?: number
-}
 
 const fileList : Ref<FileItem[]> = ref([
   {
