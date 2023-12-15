@@ -18,7 +18,8 @@
       <template v-if="column.dataIndex === 'imagePaths'">
         <a-image-preview-group>
           <template v-for="imagePath in record.imagePaths">
-            <a-image :width="10" src="\mnt\usr\local\twsny\upload\1702546577130_code.txt" />
+            <a-image :width="10" :src="'http://localhost:8080/api/v1/resources/' + imagePath"  ></a-image>
+
           </template>
         </a-image-preview-group>
       </template>
@@ -42,7 +43,7 @@
       </template>
     </template>
   </a-table>
-  <ClothesAdd :open="clotheAddModalOpen" @dialog-cancel="dialogCancel" @cancel="dialogCancel"></ClothesAdd>
+  <ClothesAdd :open="clotheAddModalOpen" @dialog-cancel="dialogCancel" @dialog-confirm="dialogConfirm"></ClothesAdd>
 </template>
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue';
@@ -52,6 +53,7 @@ import { cloneDeep } from 'lodash-es';
 import {getClothesList, getClothes, addClothes, updateClothes, deleteClothes} from "../../../../service/clothes";
 import ClothesAdd from "./ClothesAdd.vue";
 import {message} from "ant-design-vue";
+
 
 const clotheAddModalOpen = ref<boolean>(false);
 interface DataItem {
@@ -99,22 +101,29 @@ const columns = [
 // const websitesDataSource : Ref<WebsitesItem[]> = ref([])
 const dataSource: Ref<DataItem[]> = ref([])
 let dataIndex = 0;
-getClothesList().then(response => {
-  let resultData = response.data.content;
-  resultData.forEach(item => {
-    const data = {
-      key: dataIndex++,
-      id: item.id,
-      name: item.name,
-      brand: item.brand ? item.brand.name : null,
-      type: item.clothesTypeEnum,
-      price: item.price,
-      purchaseDate: item.purchaseDate,
-      imagePaths: item.imagePaths ? item.imagePaths.split(";") : []
-    };
-    dataSource.value.push(data)
+
+const init = () => {
+  dataSource.value.splice(0)
+  getClothesList().then(response => {
+    let resultData = response.data.content;
+    resultData.forEach(item => {
+      const data = {
+        key: dataIndex++,
+        id: item.id,
+        name: item.name,
+        brand: item.brand ? item.brand.name : null,
+        type: item.clothesTypeEnum,
+        price: item.price,
+        purchaseDate: item.purchaseDate,
+        imagePaths: item.imagePaths ? item.imagePaths.split(";") : []
+      };
+      dataSource.value.push(data)
+    })
   })
-})
+}
+
+init()
+
 console.log("dataSource:" + dataSource.value)
 const count = computed(() => dataSource.value.length + 1);
 const editableData: UnwrapRef<Record<string, DataItem>> = reactive({});
@@ -170,6 +179,11 @@ const handleAdd = () => {
 
 const dialogCancel = (e) => {
   clotheAddModalOpen.value = false
+}
+
+const dialogConfirm = (e) => {
+  clotheAddModalOpen.value = false
+  init()
 }
 
 </script>

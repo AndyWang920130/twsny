@@ -16,7 +16,7 @@ import AntWebsitesTable from './components/AntWebsitesTable.vue'
 import Router from './components/Router.vue'
 import Add from './components/Add.vue'
 import Image from './components/common/FileUpload.vue'
-import Modal from './components/common/modal.vue'
+import Modal from './components/common/Modal.vue'
 import FileUploadTest from './components/FileUploadTest.vue'
 
 

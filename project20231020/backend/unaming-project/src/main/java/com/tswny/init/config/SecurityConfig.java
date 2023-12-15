@@ -84,6 +84,7 @@ public class SecurityConfig {
                             .antMatchers("/api/v1/clothes/**").permitAll()
                             .antMatchers("/api/v1/brands/**").permitAll()
                             .antMatchers("/api/v1/upload/common/**").permitAll()
+                            .antMatchers("/api/v1/resources/**").permitAll()
                             // .antMatchers("/api/v1/persons/**").hasRole("USER")
                             .antMatchers("/api/v1/**").authenticated()
                     )

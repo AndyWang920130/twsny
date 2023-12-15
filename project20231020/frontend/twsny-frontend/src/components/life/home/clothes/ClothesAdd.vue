@@ -1,6 +1,6 @@
 <template>
   <Modal :open="clothesAddProps.open" @handle-cancel="handleCancel">
-    <Add @confirm="confirm" @cancel="cancel" :items="items"></Add>
+    <Add @confirm="confirm" @cancel="handleCancel" :items="items"></Add>
   </Modal>
 </template>
 <script lang="ts" setup>
@@ -89,7 +89,7 @@ const items : Ref<Item[]> = ref([
 
 const emit = defineEmits<{
   dialogCancel: [e: Event]
-  cancel: [e: Event]
+  dialogConfirm: [e: Event]
 }>()
 
 const handleCancel = (e) => {
@@ -97,23 +97,19 @@ const handleCancel = (e) => {
 }
 
 const confirm = (e) => {
-
   const data : Ref<ClothesAddVM> = ref({
       name: items.value.filter(item => item.label === 'name')[0].value,
       brandId: items.value.filter(item => item.label === 'brand')[0].value,
       price: items.value.filter(item => item.label === 'price')[0].value,
       clothesType: items.value.filter(item => item.label === 'type')[0].value,
       purchaseDate: items.value.filter(item => item.label === 'purchase date')[0].value,
-      imagePaths: fileList.value.map(item => item.url)
+      imagePaths: fileList.value.map(item => item.url.substring(item.url.indexOf("/resources/") + 11))
   })
 
-  addClothes(data.value).then(message.success("addClothes success"))
-
+  addClothes(data.value).then(() => {
+    message.success("addClothes success")
+    emit('dialogConfirm', e)
+  })
 }
-
-const cancel = (e) => {
-  emit('cancel', e)
-}
-
 </script>
 

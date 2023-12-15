@@ -102,7 +102,7 @@ const upload = (file : UploadProps['fileList'][number]) => {
         .then((res) => {
           // console.log(res, res.status)
           message.info('Upload file successful')
-          file.url = res.data
+          file.url = 'http://localhost:8080/api/v1/resources/'+ res.data
           fileList.value.push(file)
           // fileList.push(file)
         })

@@ -1,5 +1,6 @@
 package com.tswny.init.service;
 
+import com.tswny.init.config.CustomFileHandlerConfiguration;
 import com.tswny.init.web.rest.UploadResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,15 +21,19 @@ import java.util.Date;
 public class FileUploadService {
     private final Logger log = LoggerFactory.getLogger(FileUploadService.class);
 
+    private static final String UPLOAD_ROOT_LOCATION = "/mnt/usr/local/twsny/upload/";
+
     /**
      * 输出流的方式
      * @param file
      */
     public String upload(MultipartFile file) {
         String fileName = file.getOriginalFilename();
-        File filePath = new File("/mnt/usr/local/twsny/upload");
+        File filePath = new File(UPLOAD_ROOT_LOCATION);
         if (!filePath.exists()) filePath.mkdirs();
-        File tempFile = new File(filePath, new Date().getTime() + "_" + fileName);
+
+        String relativeFileName = new Date().getTime() + "_" + fileName;
+        File tempFile = new File(filePath, relativeFileName);
         try {
             FileOutputStream out = new FileOutputStream(tempFile);
             out.write(file.getBytes());
@@ -38,7 +43,8 @@ public class FileUploadService {
             e.printStackTrace();
         }
         String absolutePath = tempFile.getAbsolutePath();
-        return tempFile.getPath();
+        String path = tempFile.getPath();
+        return relativeFileName;
     }
 
     /**

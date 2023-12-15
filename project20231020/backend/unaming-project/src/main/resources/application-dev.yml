@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: aedms
+  datasource:
+    url: jdbc:mysql://121.37.190.253:3306/twsny?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: root
+    password: mi8^gXP$KBTH
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+     ddl-auto: update
+    show-sql: true
+file:
+  upload:
+    location: file:D://mnt/usr/local/twsny/upload/
