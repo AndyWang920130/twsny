@@ -12,4 +12,4 @@ spring:
     show-sql: true
 file:
   upload:
-    location: /mnt/usr/local/twsny/upload/
+    location: file:/mnt/usr/local/twsny/upload/
