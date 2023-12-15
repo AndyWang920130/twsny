@@ -14,7 +14,7 @@ import {Item, FileItem, SelectOption} from "../../../../definition/FormData";
 import {getBrandList} from "../../../../service/brand";
 import {addClothes} from "../../../../service/clothes";
 import { clothesTypes } from "../../../../utils/clothes.ts";
-import {ClothesAddVM} from "./ClothesVM";
+import {ClothesAddVM} from "../../../../definition/clothes/Clothes";
 import {message} from "ant-design-vue";
 
 interface ClothesProp {

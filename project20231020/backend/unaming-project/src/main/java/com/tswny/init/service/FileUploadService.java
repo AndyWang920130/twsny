@@ -37,7 +37,7 @@ public class FileUploadService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        String absolutePath = tempFile.getAbsolutePath();
         return tempFile.getPath();
     }
 

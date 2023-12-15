@@ -15,6 +15,14 @@
         </div>
       </template>
 
+      <template v-if="column.dataIndex === 'imagePaths'">
+        <a-image-preview-group>
+          <template v-for="imagePath in record.imagePaths">
+            <a-image :width="10" src="\mnt\usr\local\twsny\upload\1702546577130_code.txt" />
+          </template>
+        </a-image-preview-group>
+      </template>
+
       <template v-if="column.dataIndex === 'operation'">
         <div class="editable-row-operations">
           <span v-if="editableData[record.key]">
@@ -48,18 +56,19 @@ import {message} from "ant-design-vue";
 const clotheAddModalOpen = ref<boolean>(false);
 interface DataItem {
   key: number,
-  id: number;
-  name: string;
-  brand: string;
-  type: string;
-  price: number;
+  id: number,
+  name: string,
+  brand: string,
+  type: string,
+  price: number,
+  purchaseDate: string,
+  imagePaths: Array<string>
 }
 
 const columns = [
   {
     title: 'name',
     dataIndex: 'name',
-    width: '30%',
   },
   {
     title: 'brand',
@@ -72,6 +81,14 @@ const columns = [
   {
     title: 'price',
     dataIndex: 'price',
+  },
+  {
+    title: 'purchaseDate',
+    dataIndex: 'purchaseDate',
+  },
+  {
+    title: 'images',
+    dataIndex: 'imagePaths',
   },
   {
     title: 'operation',
@@ -89,9 +106,11 @@ getClothesList().then(response => {
       key: dataIndex++,
       id: item.id,
       name: item.name,
-      brand: item.brand.name,
+      brand: item.brand ? item.brand.name : null,
       type: item.clothesTypeEnum,
       price: item.price,
+      purchaseDate: item.purchaseDate,
+      imagePaths: item.imagePaths ? item.imagePaths.split(";") : []
     };
     dataSource.value.push(data)
   })

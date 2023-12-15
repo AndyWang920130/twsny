@@ -1,7 +1,7 @@
 // @ts-ignore
 import { request } from '../request/request'
 // @ts-ignore
-import { ClothesAddVM } from '../components/life/home/clothes/ClothesVM'
+import { ClothesAddVM } from '../definition/clothes/Clothes'
 
 export const getClothesList = () => {
     return request({
@@ -11,7 +11,7 @@ export const getClothesList = () => {
 };
 
 export const getClothes = (id: number) => {
-    const url = '/clothes' + '/${id}'
+    const url = '/clothes' + id
     return request({
         url: url,
         method: 'get'
@@ -36,7 +36,7 @@ export const updateClothes = (data) => {
 
 
 export const deleteClothes = (id: number) => {
-    const url = '/clothes' + '/${id}'
+    const url = '/clothes/' + id
     return request({
         url: url,
         method: 'delete',
