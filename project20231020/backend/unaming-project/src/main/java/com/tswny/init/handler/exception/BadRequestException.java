@@ -14,4 +14,8 @@ public class BadRequestException extends AbstractThrowableProblem {
         super(URI.create(ErrorConstants.PROBLEM_BASE_URL + path), title, Status.BAD_REQUEST);
     }
 
+    public BadRequestException(String title) {
+        this("", title);
+    }
+
 }

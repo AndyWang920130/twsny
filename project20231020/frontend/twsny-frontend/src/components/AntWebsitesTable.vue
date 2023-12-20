@@ -94,19 +94,6 @@ getWebsites().then(response => {
     };
     dataSource.value.push(data)
   })
-  // dataSource.value.forEach(item => {
-  //   item.key = dataIndex++;
-  // })
-  // websitesDataSource.value.forEach(item => {
-  //   const data = {
-  //     key: item.id,
-  //     url: item.url,
-  //     directory: item.directory,
-  //     description: item.description
-  //   };
-  //   dataSource.value.push(data)
-  // })
-
 })
 console.log("dataSource:" + dataSource.value)
 const count = computed(() => dataSource.value.length + 1);

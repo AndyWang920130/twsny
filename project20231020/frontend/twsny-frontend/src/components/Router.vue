@@ -7,6 +7,7 @@ import Zelda from './entertainment/game/zelda/Zelda.vue'
 import Cooking from './Cooking.vue'
 import Clothes from './life/home/clothes/Clothes.vue'
 import NotFound from './AntWebsitesTable.vue'
+import FileManagement from './work/FileManagement.vue'
 
 // const props = defineProps(['routerPath'])
 // console.log("routerPath: " + props.routerPath)
@@ -22,7 +23,8 @@ const routes = {
   '/websites': AntWebsitesTable,
   '/zelda': Zelda,
   '/cooking': Cooking,
-  '/clothes': Clothes
+  '/clothes': Clothes,
+  '/fileManagement': FileManagement
 }
 
 // window.location.href = props

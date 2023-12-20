@@ -3,6 +3,7 @@
     <a-upload
         v-model:file-list="fileList"
         :action="upload"
+        accept="image/*"
         list-type="picture-card"
         :before-upload="beforeUpload"
         @preview="handlePreview"
@@ -25,8 +26,8 @@ import type { Ref, UnwrapRef } from 'vue';
 import type { UploadProps } from 'ant-design-vue';
 import type { UploadChangeParam } from 'ant-design-vue';
 import { message } from 'ant-design-vue';
-import {uploadFile} from "../../service/clothes";
 import {FileItem} from "../../definition/FormData"
+import {uploadFile} from "../../service/common";
 
 interface FileUploadProp {
   fileList: Array<FileItem>;
@@ -102,6 +103,7 @@ const upload = (file : UploadProps['fileList'][number]) => {
         .then((res) => {
           // console.log(res, res.status)
           message.info('Upload file successful')
+          // file.url = 'http://localhost:8080/api/v1/resources/'+ res.data
           file.url = '/api/v1/resources/'+ res.data
           fileList.value.push(file)
           // fileList.push(file)

@@ -18,8 +18,8 @@
       <template v-if="column.dataIndex === 'imagePaths'">
         <a-image-preview-group>
           <template v-for="imagePath in record.imagePaths">
-            <a-image :width="10" :src="'/api/v1/resources/' + imagePath"  ></a-image>
-
+<!--            <a-image :width="20" :src="'http://localhost:8080/api/v1/resources/' + imagePath"  ></a-image>-->
+            <a-image :width="20" :src="'/api/v1/resources/' + imagePath"  ></a-image>
           </template>
         </a-image-preview-group>
       </template>

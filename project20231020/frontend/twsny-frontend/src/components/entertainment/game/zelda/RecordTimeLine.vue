@@ -29,6 +29,10 @@ recordItems.value.push(
     {
       'color': 'orange',
       'label': "start the version 2.0 (Tears of Kingdom) 2023-08-09"
+    },
+    {
+      'color': 'green',
+      'label': "defeat the four divine beast 2023-12-17"
     })
 </script>
 

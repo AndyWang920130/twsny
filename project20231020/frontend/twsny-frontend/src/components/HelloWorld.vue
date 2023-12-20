@@ -12,7 +12,7 @@ defineProps({
 <!--    <h1 class="green">{{ msg }}</h1>-->
 <!--  </div>-->
   <div class="greetings">
-    <h1 class="green">Hello Word!</h1>
+    <h1 class="green">To be completed!</h1>
   </div>
 </template>
 
