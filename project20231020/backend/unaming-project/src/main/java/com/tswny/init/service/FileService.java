@@ -63,9 +63,13 @@ public class FileService {
     }
 
     public Page<File> queryRootByPage(String keyword, Pageable pageable) {
+        return queryFileByPage(keyword, rootFolderId, pageable);
+    }
+
+    public Page<File> queryFileByPage(String keyword, Long folderId, Pageable pageable) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QFile qFile = QFile.file;
-        booleanBuilder.and(qFile.directory.id.eq(rootFolderId));
+        booleanBuilder.and(qFile.directory.id.eq(folderId));
         if (!StringUtils.isNullOrEmpty(keyword)) {
             booleanBuilder.andAnyOf(qFile.name.like("%" + keyword + "%"));
         }

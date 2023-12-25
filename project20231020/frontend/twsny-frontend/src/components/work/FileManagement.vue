@@ -17,7 +17,7 @@
               style="margin: -5px 0"
             />
             <template v-else>
-              {{ text }}
+              <a-button type="link" style="margin: -5px 0" @click="handleFolderClick(record.id)">{{ text }}</a-button>
             </template>
           </a-space>
 
@@ -65,6 +65,18 @@ import {
 } from '@ant-design/icons-vue';
 import {message} from "ant-design-vue";
 import {uploadFile} from "../../service/common";
+import {Item} from "../../definition/FormData";
+
+
+// interface FileManagementProp {
+//   rootFolderId: Number;
+// }
+//
+// const props = defineProps<FileManagementProp>()
+//
+// const rootId : Ref<number> = ref(props.rootFolderId)
+
+// const rootId : Ref<number> = ref(this.$route.params.rootFolderId)
 
 interface DataItem {
   key: number;
@@ -99,21 +111,27 @@ const rootId : Ref<number> = ref(1);
 const dataSource: Ref<DataItem[]> = ref([])
 
 let dataIndex = 0;
-getManagementFileList().then(response => {
-  let managementFileDataSource = response.data.content;
-  managementFileDataSource.forEach(item => {
-    const data = {
-      key: dataIndex++,
-      id: item.id,
-      name: item.name,
-      updateDate: item.updateDate,
-      size: item.size,
-      parentId: rootId.value,
-      fileManagementType: item.fileManagementType
-    };
-    dataSource.value.push(data)
+
+const init = () => {
+  dataSource.value.splice(0)
+  getManagementFileList(rootId.value).then(response => {
+    let managementFileDataSource = response.data.content;
+    managementFileDataSource.forEach(item => {
+      const data = {
+        key: dataIndex++,
+        id: item.id,
+        name: item.name,
+        updateDate: item.updateDate,
+        size: item.size,
+        parentId: rootId.value,
+        fileManagementType: item.fileManagementType
+      };
+      dataSource.value.push(data)
+    })
   })
-})
+}
+
+init()
 
 const count = computed(() => dataSource.value.length + 1);
 const editableData: UnwrapRef<Record<string, DataItem>> = reactive({});
@@ -212,6 +230,13 @@ const handleUpload = (file : File) => {
         message.error('Upload file failure')
       })
 }
+
+const handleFolderClick = (id: number) => {
+  // message.info('folder click: ' + id)
+  rootId.value = id
+  init()
+}
+
 </script>
 <style lang="less" scoped>
 .editable-cell {

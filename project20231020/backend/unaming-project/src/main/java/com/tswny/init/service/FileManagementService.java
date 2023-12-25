@@ -25,9 +25,9 @@ public class FileManagementService {
     }
 
     // TODO: 2023/12/20 need to complete
-    public Page<FileManagementDTO> queryByPage(String keyword, Pageable pageable) {
-        Page<Directory> directoryPage = directoryService.queryRootFolderByPage(keyword, pageable);
-        Page<File> filePage = fileService.queryRootByPage(keyword, pageable);
+    public Page<FileManagementDTO> queryByPage(String keyword, Long folderId, Pageable pageable) {
+        Page<Directory> directoryPage = directoryService.queryFolderByPage(keyword, folderId, pageable);
+        Page<File> filePage = fileService.queryFileByPage(keyword, folderId, pageable);
 
         List<FileManagementDTO> folderDTOList = directoryPage.getContent().stream().map(FileManagementDTO::new).collect(Collectors.toList());
         List<FileManagementDTO> fileDTOList = filePage.getContent().stream().map(FileManagementDTO::new).collect(Collectors.toList());

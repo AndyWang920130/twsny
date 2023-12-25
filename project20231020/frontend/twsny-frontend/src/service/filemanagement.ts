@@ -3,9 +3,9 @@ import {ClothesAddVM} from "../definition/clothes/Clothes";
 import {FileAddVM, FileUpdateVM, FolderAddVM, FolderUpdateVM} from "../definition/filemanagetment/FileManagement";
 import {UnwrapRef} from "vue";
 
-export const getManagementFileList = () => {
+export const getManagementFileList = (folderId: number) => {
     return request({
-        url: '/fileManagement',
+        url: '/fileManagement/' + folderId,
         method: 'get'
     })
 };

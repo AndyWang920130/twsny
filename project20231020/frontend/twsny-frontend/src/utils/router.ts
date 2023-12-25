@@ -5,4 +5,5 @@ export const defaultPath = {
     cooking: "/cooking",
     clothes: "/clothes",
     fileManagement: '/fileManagement'
+    // fileManagement: '/fileManagement?folderId=1'
 }

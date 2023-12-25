@@ -8,10 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/fileManagement")
@@ -23,9 +20,10 @@ public class FileManagementResource {
         this.fileManagementService = fileManagementService;
     }
 
-    @GetMapping
-    public ResponseEntity<Page<FileManagementDTO>> queryByPage(@RequestParam(required = false) String keyword,
+    @GetMapping("{folderId}")
+    public ResponseEntity<Page<FileManagementDTO>> queryByPage(@PathVariable("folderId") Long folderId,
+                                                               @RequestParam(required = false) String keyword,
                                                                @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok(this.fileManagementService.queryByPage(keyword, pageable));
+        return ResponseEntity.ok(this.fileManagementService.queryByPage(keyword, folderId, pageable));
     }
 }

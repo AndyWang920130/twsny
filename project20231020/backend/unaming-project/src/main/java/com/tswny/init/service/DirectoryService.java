@@ -58,9 +58,13 @@ public class DirectoryService {
     }
 
     public Page<Directory> queryRootFolderByPage(String keyword, Pageable pageable) {
+        return queryFolderByPage(keyword, rootFolderId, pageable);
+    }
+
+    public Page<Directory> queryFolderByPage(String keyword, Long parentFolderId, Pageable pageable) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QDirectory qDirectory = QDirectory.directory;
-        booleanBuilder.and(qDirectory.parent.id.eq(rootFolderId));
+        booleanBuilder.and(qDirectory.parent.id.eq(parentFolderId));
         if (!StringUtils.isNullOrEmpty(keyword)) {
             booleanBuilder.andAnyOf(qDirectory.path.like("%" + keyword + "%"));
         }
