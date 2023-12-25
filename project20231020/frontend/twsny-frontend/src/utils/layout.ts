@@ -1,6 +1,6 @@
 import {h, reactive, ref} from "vue";
 import {PieChartOutlined} from "@ant-design/icons-vue";
-import {defaultPath} from "./router"
+import {defaultPath} from "../router"
 
 interface navMenuItem {
     key: string,
@@ -134,7 +134,7 @@ export const defaultWorkSubNavMenuItems = reactive([
                 key: 'workSub3_children1',
                 label: '文件管理',
                 title: '文件管理',
-                url: defaultPath.fileManagement
+                url: defaultPath.fileManagement,
             }
         ]
     },

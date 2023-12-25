@@ -8,49 +8,50 @@ import Cooking from './Cooking.vue'
 import Clothes from './life/home/clothes/Clothes.vue'
 import NotFound from './AntWebsitesTable.vue'
 import FileManagement from './work/FileManagement.vue'
+// import router from "../router";
 
 // const props = defineProps(['routerPath'])
 // console.log("routerPath: " + props.routerPath)
 
-const routes = ref(
-    [
-      {
-        path: '/',
-        name: 'HelloWord',
-        component: HelloWord
-      },
-      {
-        path: '/websites',
-        name: 'AntWebsitesTable',
-        component: AntWebsitesTable
-      },
-      {
-        path: '/zelda',
-        name: 'Zelda',
-        component: Zelda
-      },
-      {
-        path: '/cooking',
-        name: 'Cooking',
-        component: Cooking
-      },
-      {
-        path: '/clothes',
-        name: 'Clothes',
-        component: Clothes
-      },
-      {
-        path: '/fileManagement',
-        name: 'FileManagement',
-        component: FileManagement
-      },
-      // {
-      //   path: '/fileManagement/:folderId',
-      //   name: 'FileManagement',
-      //   component: FileManagement
-      // }
-    ]
-)
+// const routes = ref(
+//     [
+//       {
+//         path: '/',
+//         name: 'HelloWord',
+//         component: HelloWord
+//       },
+//       {
+//         path: '/websites',
+//         name: 'AntWebsitesTable',
+//         component: AntWebsitesTable
+//       },
+//       {
+//         path: '/zelda',
+//         name: 'Zelda',
+//         component: Zelda
+//       },
+//       {
+//         path: '/cooking',
+//         name: 'Cooking',
+//         component: Cooking
+//       },
+//       {
+//         path: '/clothes',
+//         name: 'Clothes',
+//         component: Clothes
+//       },
+//       {
+//         path: '/fileManagement',
+//         name: 'FileManagement',
+//         component: FileManagement
+//       },
+//       // {
+//       //   path: '/fileManagement/:folderId',
+//       //   name: 'FileManagement',
+//       //   component: FileManagement
+//       // }
+//     ]
+// )
 
 // const routes = {
 //   '/': HelloWord,
@@ -62,27 +63,29 @@ const routes = ref(
 // }
 
 // window.location.href = props
-const currentPath = ref(window.location.hash)
+// const currentPath = ref(window.location.hash)
+//
+// window.addEventListener('hashchange', () => {
+//   currentPath.value = window.location.hash
+// })
 
-window.addEventListener('hashchange', () => {
-  currentPath.value = window.location.hash
-})
+// const currentView = computed(() => {
+//   const path = currentPath.value.slice(1) || '/'
+//   return routes.value.filter(route => path === route.path)[0].component
+// })
 
-const currentView = computed(() => {
-  const path = currentPath.value.slice(1) || '/'
-  return routes.value.filter(route => path === route.path)[0].component
-  // return routes[currentPath.value.slice(1) || '/'] || NotFound
-})
+// console.log('router: ' + router)
+// router.push('/fileManagement')
+
+// const toPage = () => {
+//   router.push('/zelda')
+// }
 </script>
 
 <template>
-  <component :is="currentView" />
-<!--  <RouterView :slot="currentView">-->
-<!--    <component-->
-<!--        :is="currentView"-->
-<!--        view-prop="folderId"-->
-<!--    />-->
-<!--  </RouterView>-->
+<!--  <component :is="currentView" />-->
+<!--  <button @click="toPage">login</button>-->
+<!--  <router-view></router-view>-->
 </template>
 
 <style lang="less" scoped>

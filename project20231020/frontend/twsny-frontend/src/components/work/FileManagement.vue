@@ -66,6 +66,8 @@ import {
 import {message} from "ant-design-vue";
 import {uploadFile} from "../../service/common";
 import {Item} from "../../definition/FormData";
+import {useRoute, useRouter} from "vue-router";
+import {defaultPath} from "../../router";
 
 
 // interface FileManagementProp {
@@ -77,6 +79,12 @@ import {Item} from "../../definition/FormData";
 // const rootId : Ref<number> = ref(props.rootFolderId)
 
 // const rootId : Ref<number> = ref(this.$route.params.rootFolderId)
+
+const router = useRouter()
+const route = useRoute()
+
+console.log("params: " + route.params.folderId)
+const folderId = ref(route.params.folderId)
 
 interface DataItem {
   key: number;
@@ -107,7 +115,12 @@ const columns = [
   },
 ];
 
-const rootId : Ref<number> = ref(1);
+// if (!folderId) folderId.value = '1'
+const rootId: Ref<number> = ref(1);
+if (folderId.value) {
+    rootId.value = parseInt(<string>folderId.value);
+}
+
 const dataSource: Ref<DataItem[]> = ref([])
 
 let dataIndex = 0;
@@ -232,8 +245,9 @@ const handleUpload = (file : File) => {
 }
 
 const handleFolderClick = (id: number) => {
-  // message.info('folder click: ' + id)
   rootId.value = id
+  router.push(defaultPath.fileManagement + "/" + id)
+  // router.push(defaultPath.clothes)
   init()
 }
 

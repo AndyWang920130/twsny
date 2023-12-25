@@ -37,7 +37,9 @@
             id = "app">
 <!--          <component :is="currentView" />-->
 <!--          <Router :routerPath="currentUrl"></Router>-->
-          <Router></Router>
+<!--          <Router></Router>-->
+<!--          <button @click="toPage">login</button>-->
+          <router-view></router-view>
         </a-layout-content>
       </a-layout>
     </a-layout>
@@ -59,9 +61,11 @@ import {
   defaultEntertainmentSubNavMenuItems,
   defaultNavKeyMap
 } from "../utils/layout"
-import {defaultPath} from "../utils/router"
+import {useRouter} from "vue-router";
+const router = useRouter()
 
-const path = defaultPath
+
+// const path = defaultPath
 const navMenuItems = defaultNavMenuItems
 
 const navKeyMap = defaultNavKeyMap
@@ -98,11 +102,14 @@ const navMenuSelected = (menu) => {
 const currentUrl = ref<string>()
 const navSubMenuSelected = (menu) => {
   currentUrl.value = menu.item.url
-  if (currentUrl.value) window.location.href = "#" + menu.item.url
-
+  // if (currentUrl.value) window.location.href = "#" + menu.item.url
+  router.push(currentUrl.value)
   initBreadcrumb()
 }
 
+// const toPage = () => {
+//   router.push('/zelda')
+// }
 </script>
 <style scoped>
 #components-layout-demo-top-side-2 .logo {

@@ -11,7 +11,7 @@
     "ant-design-vue": "^4.0.7",
     "axios": "^1.6.1",
     "lodash-es": "^4.17.21",
-    "require": "^2.4.20",
+    "require": "^0.4.4",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"
   },
