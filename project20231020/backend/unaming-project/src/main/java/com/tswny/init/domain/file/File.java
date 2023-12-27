@@ -13,8 +13,8 @@ public class File extends AbstractAuditingEntity {
 
     private String name;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = "files", allowSetters = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"children", "files"}, allowSetters = true)
     private Directory directory;
 
     private String fileName;

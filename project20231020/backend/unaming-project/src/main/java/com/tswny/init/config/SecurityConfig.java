@@ -62,7 +62,7 @@ public class SecurityConfig {
                  // 添加用户民密码过滤器
                 // .addFilterBefore(initCustomUsernamePasswordAuthenticationFilter("/api/v1/authenticate/username", HttpMethod.POST), UsernamePasswordAuthenticationFilter.class)
                  // 添加自定义过滤器
-                .addFilterBefore(new CustomTenantFilter(), AuthorizationFilter.class)
+                // .addFilterBefore(new CustomTenantFilter(), AuthorizationFilter.class)
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()

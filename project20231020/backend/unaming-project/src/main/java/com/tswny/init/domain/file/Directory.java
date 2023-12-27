@@ -21,7 +21,7 @@ public class Directory extends AbstractAuditingEntity {
     private List<File> files;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = "children", allowSetters = true)
+    @JsonIgnoreProperties(value = {"children", "files"}, allowSetters = true)
     private Directory parent;
 
     @OneToMany(mappedBy = "parent")

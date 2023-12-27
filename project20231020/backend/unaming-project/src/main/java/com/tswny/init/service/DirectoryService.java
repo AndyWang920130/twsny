@@ -52,7 +52,7 @@ public class DirectoryService {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QDirectory qDirectory = QDirectory.directory;
         if (!StringUtils.isNullOrEmpty(keyword)) {
-            booleanBuilder.andAnyOf(qDirectory.path.like("%" + keyword + "%"));
+            booleanBuilder.andAnyOf(qDirectory.name.like("%" + keyword + "%"));
         }
         return this.directoryRepository.findAll(booleanBuilder, pageable);
     }
@@ -66,7 +66,7 @@ public class DirectoryService {
         QDirectory qDirectory = QDirectory.directory;
         booleanBuilder.and(qDirectory.parent.id.eq(parentFolderId));
         if (!StringUtils.isNullOrEmpty(keyword)) {
-            booleanBuilder.andAnyOf(qDirectory.path.like("%" + keyword + "%"));
+            booleanBuilder.andAnyOf(qDirectory.name.like("%" + keyword + "%"));
         }
         return this.directoryRepository.findAll(booleanBuilder, pageable);
     }

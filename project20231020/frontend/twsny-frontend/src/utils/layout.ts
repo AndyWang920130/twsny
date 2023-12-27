@@ -20,7 +20,15 @@ export const defaultLifeSubNavMenuItems = reactive([
             icon: () => h(PieChartOutlined),
             label: '网站管理',
             title: '网站管理',
-            url: defaultPath.websites
+            url: defaultPath.websites,
+            children: [
+                {
+                    key: 'lifeSub3_children1',
+                    label: '网站列表',
+                    title: '网站列表',
+                    url: defaultPath.websites
+                },
+            ]
         },
         {
             key: 'lifeSub1',
@@ -152,6 +160,7 @@ export const defaultEntertainmentSubNavMenuItems = reactive([
                     key: 'entertainmentSub1_children1',
                     label: '英雄联盟',
                     title: '英雄联盟',
+                    url: defaultPath.root
                 },
                 {
                     key: 'entertainmentSub1_children2',

@@ -1,5 +1,5 @@
 <template>
-  <a-button class="editable-add-btn" style="margin-bottom: 8px" @click="handleAdd">Add Folder</a-button>
+  <a-button class="editable-add-btn" style="margin-bottom: 8px" @click="handleAddFolder">Add Folder</a-button>
   <a-upload :file-list="fileList" :action="handleUpload">
     <a-button class="editable-add-btn" style="margin-bottom: 8px" >Upload File</a-button>
   </a-upload>
@@ -176,7 +176,7 @@ const folderSave = (dataItem: DataItem) => {
     })
   } else {
     addFolder(addVM).then(response => {
-      console.log("save website obj successfully")
+      dataSource.value.filter(item => dataItem.key === item.key)[0].id = response.data.id
     })
   }
 }
@@ -201,7 +201,9 @@ const onDelete = (key: number) => {
   const id = dataItem.id
   const fileManagementType = dataItem.fileManagementType
   if (id) {
-    if (fileManagementType === 'FOLDER') deleteFolder(id)
+    if (fileManagementType === 'FOLDER') deleteFolder(id).catch(error => {
+      message.error('Delete folder failure, errorCode: ' + error.message)
+    })
     if (fileManagementType === 'FILE') deleteFile(id)
   }
 
@@ -212,12 +214,23 @@ const cancel = (key: number) => {
   delete editableData[key];
 };
 
-const handleAdd = () => {
+const handleAddFolder = () => {
   const newData = {
-    key: dataIndex,
+    key: dataIndex++,
     name: "新建文件夹",
     parentId: rootId.value,
     fileManagementType: 'FOLDER'
+  };
+  dataSource.value.push(newData);
+};
+
+const handleAddFile = (file) => {
+  const newData = {
+    key: dataIndex++,
+    name: file.name,
+    updateDate: file.lastModifiedDate,
+    parentId:file.directory.id,
+    fileManagementType: 'FILE'
   };
   dataSource.value.push(newData);
 };
@@ -229,7 +242,9 @@ const handleUpload = (file : File) => {
         .then((res) => {
           message.info('Upload file successful')
           const fileAddVM = {name: res.data, directoryId: rootId.value}
-          addFile(fileAddVM)
+          addFile(fileAddVM).then(response => {
+            handleAddFile(response.data)
+          })
         })
         .catch((error) => {
           message.error('Upload file failure: ' + error.message)

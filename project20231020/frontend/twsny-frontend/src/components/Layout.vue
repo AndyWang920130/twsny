@@ -1,9 +1,9 @@
 <template>
   <a-layout>
     <a-layout-header class="header">
-      <div class="logo" />
+      <div class="logo"/>
       <a-menu
-          v-model:selectedKeys="selectedKeys1"
+          v-model:selectedKeys="navSelectedKeys"
           theme="dark"
           mode="horizontal"
           :style="{ lineHeight: '64px' }"
@@ -15,12 +15,13 @@
     <a-layout>
       <a-layout-sider width="200" style="background: #fff">
         <a-menu
-            v-model:selectedKeys="selectedKeys2"
+            v-model:selectedKeys="subNavSelectedKeys"
             v-model:openKeys="openKeys"
             mode="inline"
             :style="{ height: '100%', borderRight: 0 }"
             :items="subNavMenuItems"
             @select="navSubMenuSelected"
+            @openChange="subNavMenuOpenChanged"
         >
         </a-menu>
       </a-layout-sider>
@@ -35,10 +36,6 @@
         <a-layout-content
             :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
             id = "app">
-<!--          <component :is="currentView" />-->
-<!--          <Router :routerPath="currentUrl"></Router>-->
-<!--          <Router></Router>-->
-<!--          <button @click="toPage">login</button>-->
           <router-view></router-view>
         </a-layout-content>
       </a-layout>
@@ -67,44 +64,75 @@ const router = useRouter()
 
 // const path = defaultPath
 const navMenuItems = defaultNavMenuItems
-
 const navKeyMap = defaultNavKeyMap
-const selectedKeys1 = ref<string[]>(["life"]);
+
+const navSelected = ref(navMenuItems.value[0]);
+const navSelectedKeys = ref<string[]>([navSelected.value.key]);
+
 const breadcrumbArr : Ref<string[]> = ref([]);
 
-const subNavMenuItems = ref(navKeyMap.get("life"))
-let selectedKeys2 = ref<string[]>(['lifeSub1_children1']);
-let openKeys = ref<string[]>(['lifeSub1']);
+const subNavMenuItems = ref(navKeyMap.get(navSelectedKeys.value[0]))
+const subNavOpened = ref(subNavMenuItems.value[0])
+const openKeys = ref([subNavOpened.value.key]);
+const subNavSelected = ref(subNavOpened.value.children[0])
+const subNavSelectedKeys = ref<string[]>([subNavSelected.value.key]);
 
 const initBreadcrumb = () => {
   breadcrumbArr.value.splice(0)
-  const breadcrumb1 = selectedKeys1.value[0]
-  const breadcrumb2 = openKeys.value[0]
-  const breadcrumb3 = selectedKeys2.value[0]
+  const breadcrumb1 = navSelected.value.label
+  const breadcrumb2 = subNavOpened.value.label
+  const breadcrumb3 = subNavSelected.value.label
+
   breadcrumbArr.value.push(breadcrumb1)
   breadcrumbArr.value.push(breadcrumb2)
   breadcrumbArr.value.push(breadcrumb3)
 }
-initBreadcrumb()
+
+const init = () => {
+  initBreadcrumb()
+  router.push(subNavSelected.value.url)
+}
+
+init()
 
 const navMenuSelected = (menu) => {
-  console.log("menu item title: " + menu.item.title)
-  console.log("menu key: " + menu.key)
-  const navMenuKey = menu.key
-  const subNavItems = navKeyMap.get(navMenuKey)
-  subNavMenuItems.value = subNavItems
-  selectedKeys2 = ref<string[]>([subNavMenuItems.value[0].children ? subNavMenuItems.value[0].children[0].key : subNavMenuItems.value[0].key])
-  openKeys = ref<string[]>([subNavMenuItems.value[0].key])
-
+  navSelected.value = navMenuItems.value.filter(item => menu.key === item.key)[0]
+  subNavMenuItems.value = navKeyMap.get(navSelected.value.key)
+  subNavOpened.value = subNavMenuItems.value[0]
+  subNavSelected.value = subNavOpened.value.children[0]
+  // subNavSelectedKeys.value = subNavMenuItems.value[0].children ? subNavMenuItems.value[0].children[0].key : subNavMenuItems.value[0].key
   initBreadcrumb()
 }
 
-const currentUrl = ref<string>()
+const subNavMenuOpenChanged = (openKeys, openKey) => {
+  console.log("openKeys changed: " + openKeys)
+}
+
 const navSubMenuSelected = (menu) => {
-  currentUrl.value = menu.item.url
+  // navSelected.value = navMenuItems.value.filter(item => menu.key === item.key)[0]
+  // const menuItem = subNavMenuItems.value.filter(item => item.key === menu.key)
+  // if (menuItem) {
+  //   subNavOpened.value = menuItem[0]
+  //   return;
+  // }
+
+  // const subNavChildrenItems = ref(subNavOpened.value.children);
+  // subNavSelected.value  = subNavChildrenItems.value.filter(item => menu.key === item.key)[0]
+  // subNavOpened.value = subNavMenuItems.value[0]
+  // const subNavMenuChildrenItems = ref (subNavMenuItems.value)
+
+  const subNavChildrenItems = ref([])
+  subNavMenuItems.value.map(item => {
+    subNavChildrenItems.value = item.children
+    const subNavChildrenItemArray = subNavChildrenItems.value.filter(childrenItem => childrenItem.key === menu.key)
+    if (subNavChildrenItemArray.length > 0) {
+      subNavOpened.value = item
+      subNavSelected.value = subNavChildrenItemArray[0]
+    }
+  })
   // if (currentUrl.value) window.location.href = "#" + menu.item.url
-  router.push(currentUrl.value)
   initBreadcrumb()
+  router.push(subNavSelected.value.url)
 }
 
 // const toPage = () => {

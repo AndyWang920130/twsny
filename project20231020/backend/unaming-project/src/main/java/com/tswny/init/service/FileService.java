@@ -34,8 +34,11 @@ public class FileService {
 
     private final DirectoryRepository directoryRepository;
 
-    public FileService(DirectoryRepository directoryRepository) {
+    private final FileUploadService fileUploadService;
+
+    public FileService(DirectoryRepository directoryRepository, FileUploadService fileUploadService) {
         this.directoryRepository = directoryRepository;
+        this.fileUploadService = fileUploadService;
     }
 
     /**
@@ -113,6 +116,11 @@ public class FileService {
      * @return 是否成功
      */
     public boolean deleteById(Long id) {
+        Optional<File> fileOptional = fileRepository.findById(id);
+        if (!fileOptional.isPresent()) return false;
+        File file = fileOptional.get();
+        String relativeFilename = file.getFileName();
+        fileUploadService.delete(relativeFilename);
         this.fileRepository.deleteById(id);
         return true;
     }

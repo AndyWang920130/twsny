@@ -63,5 +63,11 @@ public class FileUploadService {
         }
     }
 
-
+    public void delete(String relativeFilename) {
+        File filePath = new File(UPLOAD_ROOT_LOCATION);
+        File file = new File(filePath, relativeFilename);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
 }
