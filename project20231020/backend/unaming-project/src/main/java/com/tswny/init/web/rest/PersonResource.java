@@ -41,8 +41,6 @@ public class PersonResource {
         return personService.findById(id);
     }
 
-
-
     @GetMapping
     public Page<PersonDTO> getAll(@RequestParam(required = false) String keyword,
                                   @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {

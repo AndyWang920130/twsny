@@ -2,17 +2,39 @@
   <a-button class="editable-add-btn" style="margin-bottom: 8px" @click="handleAdd">Add</a-button>
   <a-table bordered :data-source="dataSource" :columns="columns">
     <template #bodyCell="{ column, text, record }">
-      <template v-if="['url', 'directory', 'description'].includes(column.dataIndex)">
-        <div>
-          <a-input
-              v-if="editableData[record.key]"
-              v-model:value="editableData[record.key][column.dataIndex]"
-              style="margin: -5px 0"
-          />
-          <template v-else>
-            {{ text }}
-          </template>
-        </div>
+      <template v-if="['url'].includes(column.dataIndex)">
+        <a-input
+            v-if="editableData[record.key]"
+            v-model:value="editableData[record.key][column.dataIndex]"
+            style="margin: -5px 0"
+        />
+        <template v-else>
+          <a :href="text" target="_Blank">{{ text }}</a>
+        </template>
+      </template>
+
+      <template v-if="['directory'].includes(column.dataIndex)">
+        <a-select
+            v-if="editableData[record.key]"
+            v-model:value="editableData[record.key][column.dataIndex]"
+            :options="websiteTypeOptions"
+            style="width:100px; margin: -5px 0"
+        />
+        <template v-else>
+          {{ text }}
+        </template>
+      </template>
+
+
+      <template v-if="['description'].includes(column.dataIndex)">
+        <a-input
+            v-if="editableData[record.key]"
+            v-model:value="editableData[record.key][column.dataIndex]"
+            style="margin: -5px 0"
+        />
+        <template v-else>
+          {{ text }}
+        </template>
       </template>
 
       <template v-if="column.dataIndex === 'operation'">
@@ -40,7 +62,9 @@ import { computed, reactive, ref } from 'vue';
 import type { Ref, UnwrapRef } from 'vue';
 import { CheckOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { cloneDeep } from 'lodash-es';
-import { getWebsites, addWebsite, updateWebsite, deleteWebsite } from "../service/website"
+import { getWebsites, addWebsite, updateWebsite, deleteWebsite } from "../../../service/website"
+import {getWebsiteTypeList} from "../../../service/config";
+import {SelectOption} from "../../../definition/FormData";
 interface DataItem {
   key: number,
   id: number;
@@ -48,15 +72,6 @@ interface DataItem {
   directory: string;
   description: string;
 }
-
-// interface WebsitesItem {
-//   id: number;
-//   url: string;
-//   directory: string;
-//   description: string;
-//   username: string;
-//   password: string
-// }
 
 const columns = [
   {
@@ -77,6 +92,18 @@ const columns = [
     dataIndex: 'operation',
   },
 ];
+
+
+const websiteTypeOptions: Ref<SelectOption[]> = ref([])
+getWebsiteTypeList({itemKey: 'website.type'}).then(response => {
+  response.data.content.forEach(item => {
+    const optionValue = {
+        value: item.itemValue,
+        label: item.itemValue
+    }
+    websiteTypeOptions.value.push(optionValue)
+  })
+})
 
 // const websitesDataSource : Ref<WebsitesItem[]> = ref([])
 const dataSource: Ref<DataItem[]> = ref([])
@@ -130,14 +157,16 @@ const cancel = (key: number) => {
 };
 
 const handleAdd = () => {
+  const key = dataIndex++
   const newData = {
-    key: dataIndex,
+    key: key,
     id: null,
-    url: `www.baidu.com ${dataIndex}`,
+    url: `https://www.baidu.com`,
     directory: '门户网站',
-    description: `baidu ${dataIndex}`,
+    description: `baidu`,
   };
   dataSource.value.push(newData);
+  editableData[key] = cloneDeep(dataSource.value.filter(item => key === item.key)[0]);
 };
 </script>
 <style lang="less" scoped>

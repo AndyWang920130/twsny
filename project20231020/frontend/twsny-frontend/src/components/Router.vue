@@ -2,11 +2,11 @@
 import { ref, computed } from 'vue'
 import HelloWord from './HelloWorld.vue'
 import Card from './Card.vue'
-import AntWebsitesTable from './AntWebsitesTable.vue'
+import AntWebsitesTable from './life/website/WebsitesManagement.vue'
 import Zelda from './entertainment/game/zelda/Zelda.vue'
 import Cooking from './Cooking.vue'
 import Clothes from './life/home/clothes/Clothes.vue'
-import NotFound from './AntWebsitesTable.vue'
+import NotFound from './life/website/WebsitesManagement.vue'
 import FileManagement from './work/FileManagement.vue'
 // import router from "../router";
 

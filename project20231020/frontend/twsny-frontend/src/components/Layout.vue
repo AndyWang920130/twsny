@@ -46,10 +46,10 @@
 import {Ref, ref, h, reactive, computed} from 'vue';
 import { UserOutlined, LaptopOutlined, NotificationOutlined, PieChartOutlined } from '@ant-design/icons-vue';
 import Router from './Router.vue'
-import NotFound from "./AntWebsitesTable.vue";
+import NotFound from "./life/website/WebsitesManagement.vue";
 import HelloWord from "./HelloWorld.vue";
 import Card from "./Card.vue";
-import AntWebsitesTable from "./AntWebsitesTable.vue";
+import AntWebsitesTable from "./life/website/WebsitesManagement.vue";
 
 import {
   defaultNavMenuItems,

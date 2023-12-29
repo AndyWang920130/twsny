@@ -41,7 +41,7 @@
         </a-form-item>
       </template>
     </slot>
-    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+    <a-form-item :wrapper-col="{ span: 14, offset: 4 }" v-show="props.showConfirmBtn">
       <a-button type="primary" @click="confirm">Confirm</a-button>
       <a-button style="margin-left: 10px" @click="cancel">Cancel</a-button>
     </a-form-item>
@@ -55,14 +55,16 @@ import type { UnwrapRef } from 'vue';
 import type { Rule } from 'ant-design-vue/es/form';
 import FileUpload from "./FileUpload.vue";
 import FileUploadTest from "../FileUploadTest.vue";
-import {Item, FileItem} from "../../definition/FormData"
+import {Item, FileItem, ItemType} from "../../definition/FormData"
 
 interface AddProp {
   prop1: string;
   items: Array<Item>;
+  showConfirmBtn: boolean
 }
 
 const props = defineProps<AddProp>()
+
 
 const emit = defineEmits<{
   confirm: [e: Event]

@@ -11,7 +11,8 @@ interface navMenuItem {
 export const defaultNavMenuItems = ref<navMenuItem[]>([
     {key : "life", label : "生活", title: "生活"},
     {key : "work", label : "工作", title: "工作"},
-    {key : "entertainment", label : "娱乐", title: "娱乐"}])
+    {key : "entertainment", label : "娱乐", title: "娱乐"},
+    {key : "config", label : "配置", title: "配置"},])
 
 
 export const defaultLifeSubNavMenuItems = reactive([
@@ -193,9 +194,28 @@ export const defaultEntertainmentSubNavMenuItems = reactive([
     ]
 )
 
+export const defaultConfigSubNavMenuItems = reactive([
+    {
+        key: 'configSub1',
+        icon: () => h(PieChartOutlined),
+        label: '网站配置',
+        title: '网站配置',
+        children: [
+            {
+                key: 'configSub1_children1',
+                label: '网站配置',
+                title: '网站配置',
+                url: defaultPath.websitesConfig
+            }
+        ]
+    }
+    ]
+)
+
 
 // @ts-ignore
 export const defaultNavKeyMap = new Map()
 defaultNavKeyMap.set("life", defaultLifeSubNavMenuItems)
 defaultNavKeyMap.set("work", defaultWorkSubNavMenuItems)
 defaultNavKeyMap.set("entertainment", defaultEntertainmentSubNavMenuItems)
+defaultNavKeyMap.set("config", defaultConfigSubNavMenuItems)

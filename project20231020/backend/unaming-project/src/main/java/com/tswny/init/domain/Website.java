@@ -13,6 +13,8 @@ public class Website extends AbstractAuditingEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String name;
+
     private String url;
 
     private String loginName;
@@ -69,5 +71,13 @@ public class Website extends AbstractAuditingEntity {
 
     public void setDirectory(String directory) {
         this.directory = directory;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

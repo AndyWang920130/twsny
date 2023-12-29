@@ -2,7 +2,7 @@ import {createRouter, createWebHashHistory, createWebHistory, RouteRecordRaw} fr
 // @ts-ignore
 import HelloWord from './components/HelloWorld.vue'
 // @ts-ignore
-import AntWebsitesTable from './components/AntWebsitesTable.vue'
+import AntWebsitesTable from './components/life/website/WebsitesManagement.vue'
 // @ts-ignore
 import Zelda from './components/entertainment/game/zelda/Zelda.vue'
 // @ts-ignore
@@ -11,8 +11,11 @@ import Cooking from './components/Cooking.vue'
 import Clothes from './components/life/home/clothes/Clothes.vue'
 // @ts-ignore
 import FileManagement from './components/work/FileManagement.vue'
+// @ts-ignore
+import WebsiteConfig from './components/config/website/WebsiteConfig.vue'
 import {ref} from "vue";
 
+// @ts-ignore
 // @ts-ignore
 // @ts-ignore
 // @ts-ignore
@@ -52,10 +55,15 @@ const routes : Array<RouteRecordRaw> =
         //     component: FileManagement
         // },
         {
-          path: '/fileManagement/:folderId*',
-          name: 'FileManagement',
-          component: FileManagement
-        }
+            path: '/fileManagement/:folderId*',
+            name: 'FileManagement',
+            component: FileManagement
+        },
+        {
+            path: '/config/website',
+            name: 'WebsiteConfig',
+            component: WebsiteConfig
+        },
     ]
 
 const router = createRouter({
@@ -69,5 +77,6 @@ export const defaultPath = {
     zelda: "/zelda",
     cooking: "/cooking",
     clothes: "/clothes",
-    fileManagement: '/fileManagement'
+    fileManagement: '/fileManagement',
+    websitesConfig: "/config/website",
 }
