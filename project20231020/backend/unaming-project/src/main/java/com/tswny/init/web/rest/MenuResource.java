@@ -39,6 +39,13 @@ public class MenuResource {
         return ResponseEntity.ok(this.menuService.queryByPage(keyword, pageable));
     }
 
+
+    @GetMapping("root")
+    public ResponseEntity<Page<Menu>> queryRootByPage(@RequestParam(required = false) String keyword,
+                                                  @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(this.menuService.queryRootByPage(keyword, pageable));
+    }
+
     /**
      * 通过主键查询单条数据
      *

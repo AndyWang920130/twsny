@@ -24,6 +24,8 @@ public class Menu extends AbstractAuditingEntity {
     @JsonIgnoreProperties(value = "children", allowSetters = true)
     private Menu parent;
 
+    private Boolean disable;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -62,5 +64,14 @@ public class Menu extends AbstractAuditingEntity {
 
     public void setParent(Menu parent) {
         this.parent = parent;
+    }
+
+
+    public Boolean getDisable() {
+        return disable;
+    }
+
+    public void setDisable(Boolean disable) {
+        this.disable = disable;
     }
 }

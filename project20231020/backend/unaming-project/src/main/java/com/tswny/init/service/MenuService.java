@@ -47,13 +47,30 @@ public class MenuService {
      * @return 查询结果
      */
     public Page<Menu> queryByPage(@RequestParam(required = false) String keyword,
-                                  @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+                                  @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        BooleanBuilder booleanBuilder = generateBooleanBuilder(keyword);
+        return this.menuRepository.findAll(booleanBuilder, pageable);
+    }
+
+    public Page<Menu> queryRootByPage(@RequestParam(required = false) String keyword,
+                                  @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        BooleanBuilder booleanBuilder = generateBooleanBuilder(keyword);
+        QMenu qMenu = QMenu.menu;
+        booleanBuilder.and(qMenu.parent.isNull());
+        return this.menuRepository.findAll(booleanBuilder, pageable);
+    }
+
+    private BooleanBuilder generateBooleanBuilder(String keyword) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QMenu qMenu = QMenu.menu;
+
+        booleanBuilder.andAnyOf(qMenu.disable.ne(true),
+                qMenu.disable.isNull());
+
         if (!StringUtils.isNullOrEmpty(keyword)) {
             booleanBuilder.and(qMenu.name.like("%" + keyword + "%"));
         }
-        return this.menuRepository.findAll(booleanBuilder, pageable);
+        return booleanBuilder;
     }
 
     /**

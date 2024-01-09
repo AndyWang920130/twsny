@@ -1,6 +1,7 @@
-import {h, reactive, ref} from "vue";
+import {h, reactive, Ref, ref} from "vue";
 import {PieChartOutlined} from "@ant-design/icons-vue";
 import {defaultPath} from "../router"
+import {getRootMenuList} from "../service/menu";
 
 interface navMenuItem {
     key: string,
@@ -8,11 +9,69 @@ interface navMenuItem {
     title: string
 }
 
-export const defaultNavMenuItems = ref<navMenuItem[]>([
-    {key : "life", label : "生活", title: "生活"},
-    {key : "work", label : "工作", title: "工作"},
-    {key : "entertainment", label : "娱乐", title: "娱乐"},
-    {key : "config", label : "配置", title: "配置"},])
+export const defaultNavMenuItems : Ref<navMenuItem[]> = ref([])
+// @ts-ignore
+await getRootMenuList().then(response => {
+    response.data.content.forEach(item => {
+        const data = {
+            key: item.id,
+            label: item.name,
+            title: item.name,
+
+        };
+        // return data;
+        defaultNavMenuItems.value.push(data)
+    })
+})
+// @ts-ignore
+// initRootMenuList()
+// @ts-ignore
+// defaultNavMenuItems.value = rootMenuList
+// @ts-ignore
+// initDefaultNavMenuItems.then(response => {
+//     response.data.content.forEach(item => {
+//         const data = {
+//             key: item.id,
+//             label: item.name,
+//             title: item.name,
+//
+//         };
+//         defaultNavMenuItems.value.push(data)
+//     })
+// })
+
+// @ts-ignore
+// export const defaultNavMenuItems : Promise<navMenuItem[]> = getRootMenuList().then(response => {
+//     response.data.content.map(item => {
+//         const data = {
+//             key: item.id,
+//             label: item.name,
+//             title: item.name,
+//
+//         };
+//         return data
+//     })
+// })
+
+
+// export const defaultNavMenuItems : Ref<navMenuItem[]> = ref([]);
+// getRootMenuList().then(response => {
+//     response.data.content.forEach(item => {
+//         const data = {
+//             key: item.id,
+//             label: item.name,
+//             title: item.name,
+//
+//         };
+//         defaultNavMenuItems.value.push(data)
+//     })
+// })
+
+// export const defaultNavMenuItems = ref<navMenuItem[]>([
+//     {key : "life", label : "生活", title: "生活"},
+//     {key : "work", label : "工作", title: "工作"},
+//     {key : "entertainment", label : "娱乐", title: "娱乐"},
+//     {key : "config", label : "配置", title: "配置"},])
 
 
 export const defaultLifeSubNavMenuItems = reactive([
@@ -215,7 +274,7 @@ export const defaultConfigSubNavMenuItems = reactive([
 
 // @ts-ignore
 export const defaultNavKeyMap = new Map()
-defaultNavKeyMap.set("life", defaultLifeSubNavMenuItems)
-defaultNavKeyMap.set("work", defaultWorkSubNavMenuItems)
-defaultNavKeyMap.set("entertainment", defaultEntertainmentSubNavMenuItems)
-defaultNavKeyMap.set("config", defaultConfigSubNavMenuItems)
+defaultNavKeyMap.set(132, defaultLifeSubNavMenuItems)
+defaultNavKeyMap.set(133, defaultWorkSubNavMenuItems)
+defaultNavKeyMap.set(134, defaultEntertainmentSubNavMenuItems)
+defaultNavKeyMap.set(135, defaultConfigSubNavMenuItems)
