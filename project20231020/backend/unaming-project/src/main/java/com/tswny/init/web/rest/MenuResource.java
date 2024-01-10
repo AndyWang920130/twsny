@@ -42,7 +42,7 @@ public class MenuResource {
 
     @GetMapping("root")
     public ResponseEntity<Page<Menu>> queryRootByPage(@RequestParam(required = false) String keyword,
-                                                  @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+                                                  @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok(this.menuService.queryRootByPage(keyword, pageable));
     }
 

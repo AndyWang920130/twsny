@@ -46,14 +46,12 @@ public class MenuService {
      * 分页查询
      * @return 查询结果
      */
-    public Page<Menu> queryByPage(@RequestParam(required = false) String keyword,
-                                  @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public Page<Menu> queryByPage(String keyword, Pageable pageable) {
         BooleanBuilder booleanBuilder = generateBooleanBuilder(keyword);
         return this.menuRepository.findAll(booleanBuilder, pageable);
     }
 
-    public Page<Menu> queryRootByPage(@RequestParam(required = false) String keyword,
-                                  @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public Page<Menu> queryRootByPage(String keyword, Pageable pageable) {
         BooleanBuilder booleanBuilder = generateBooleanBuilder(keyword);
         QMenu qMenu = QMenu.menu;
         booleanBuilder.and(qMenu.parent.isNull());
