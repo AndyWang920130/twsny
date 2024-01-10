@@ -40,11 +40,21 @@ public class MenuResource {
     }
 
 
+    @GetMapping("byParent/{parentId}")
+    public ResponseEntity<Page<Menu>> queryByParent(@PathVariable("parentId") Long parentId,
+                                                    @RequestParam(required = false) String keyword,
+                                                    @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(this.menuService.queryByParent(parentId, keyword, pageable));
+    }
+
+
     @GetMapping("root")
     public ResponseEntity<Page<Menu>> queryRootByPage(@RequestParam(required = false) String keyword,
                                                   @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.ok(this.menuService.queryRootByPage(keyword, pageable));
     }
+
+
 
     /**
      * 通过主键查询单条数据

@@ -1,7 +1,7 @@
 import {h, reactive, Ref, ref} from "vue";
 import {PieChartOutlined} from "@ant-design/icons-vue";
 import {defaultPath} from "../router"
-import {getRootMenuList} from "../service/menu";
+import {getMenuListByParentId, getRootMenuList} from "../service/menu";
 
 interface navMenuItem {
     key: string,
@@ -17,264 +17,136 @@ await getRootMenuList().then(response => {
             key: item.id,
             label: item.name,
             title: item.name,
-
         };
         // return data;
         defaultNavMenuItems.value.push(data)
     })
 })
+
+export const defaultLifeSubNavMenuItems = ref([])
 // @ts-ignore
-// initRootMenuList()
-// @ts-ignore
-// defaultNavMenuItems.value = rootMenuList
-// @ts-ignore
-// initDefaultNavMenuItems.then(response => {
-//     response.data.content.forEach(item => {
-//         const data = {
-//             key: item.id,
-//             label: item.name,
-//             title: item.name,
-//
-//         };
-//         defaultNavMenuItems.value.push(data)
-//     })
-// })
-
-// @ts-ignore
-// export const defaultNavMenuItems : Promise<navMenuItem[]> = getRootMenuList().then(response => {
-//     response.data.content.map(item => {
-//         const data = {
-//             key: item.id,
-//             label: item.name,
-//             title: item.name,
-//
-//         };
-//         return data
-//     })
-// })
-
-
-// export const defaultNavMenuItems : Ref<navMenuItem[]> = ref([]);
-// getRootMenuList().then(response => {
-//     response.data.content.forEach(item => {
-//         const data = {
-//             key: item.id,
-//             label: item.name,
-//             title: item.name,
-//
-//         };
-//         defaultNavMenuItems.value.push(data)
-//     })
-// })
-
-// export const defaultNavMenuItems = ref<navMenuItem[]>([
-//     {key : "life", label : "生活", title: "生活"},
-//     {key : "work", label : "工作", title: "工作"},
-//     {key : "entertainment", label : "娱乐", title: "娱乐"},
-//     {key : "config", label : "配置", title: "配置"},])
-
-
-export const defaultLifeSubNavMenuItems = reactive([
-        {
-            key: 'lifeSub3',
+await getMenuListByParentId(132).then(response => {
+    response.data.content.forEach(item => {
+        const data = {
+            key: item.id,
             icon: () => h(PieChartOutlined),
-            label: '网站管理',
-            title: '网站管理',
-            url: defaultPath.websites,
-            children: [
-                {
-                    key: 'lifeSub3_children1',
-                    label: '网站列表',
-                    title: '网站列表',
-                    url: defaultPath.websites
-                },
-            ]
-        },
-        {
-            key: 'lifeSub1',
-            icon: () => h(PieChartOutlined),
-            label: '居家',
-            title: '居家',
-            children: [
-                {
-                    key: 'lifeSub1_children1',
-                    label: '美食',
-                    title: '美食',
-                    url: defaultPath.cooking
-                },
-                {
-                    key: 'lifeSub1_children2',
-                    label: '园艺',
-                    title: '园艺',
-                    url: defaultPath.root
-                },
-                {
-                    key: 'lifeSub1_children3',
-                    label: '衣橱',
-                    title: '衣橱',
-                    url: defaultPath.clothes
-                },
-            ]
-        },
-        {
-            key: 'lifeSub2',
-            icon: () => h(PieChartOutlined),
-            label: '旅行',
-            title: '旅行',
-            children: [
-                {
-                    key: 'lifeSub2_children1',
-                    label: '行程',
-                    title: '行程',
-                    url: defaultPath.root
-                },
-                {
-                    key: 'lifeSub2_children2',
-                    label: '酒店',
-                    title: '酒店',
-                    url: defaultPath.root
+            label: item.name,
+            title: item.name,
+            children: []
+        };
+
+        if (item.children) {
+            const childrenArray = []
+            item.children.forEach(childrenItem => {
+                const childrenData = {
+                    key: childrenItem.id,
+                    label: childrenItem.name,
+                    title: childrenItem.name,
+                    url: childrenItem.url
                 }
-            ]
-        },
-    ]
-)
+                childrenArray.push(childrenData)
+            })
+            data.children = childrenArray
+        }
+        // return data;
+        defaultLifeSubNavMenuItems.value.push(data)
+    })
+})
 
-export const defaultWorkSubNavMenuItems = reactive([
-        {
-            key: 'workSub1',
+export const defaultWorkSubNavMenuItems = ref([])
+// @ts-ignore
+await getMenuListByParentId(133).then(response => {
+    response.data.content.forEach(item => {
+        const data = {
+            key: item.id,
             icon: () => h(PieChartOutlined),
-            label: '编程',
-            title: '编程',
-            children: [
-                {
-                    key: 'workSub1_children1',
-                    label: '后端',
-                    title: '后端',
-                    url: defaultPath.root
-                },
-                {
-                    key: 'workSub1_children2',
-                    label: '前端',
-                    title: '前端',
-                    url: defaultPath.root
-                },
-                {
-                    key: 'workSub1_children3',
-                    label: '部署',
-                    title: '部署',
-                    url: defaultPath.root
-                },
-            ]
-        },
-        {
-            key: 'workSub2',
-            icon: () => h(PieChartOutlined),
-            label: '专利',
-            title: '专利',
-            children: [
-                {
-                    key: 'workSub2_children1',
-                    label: '检索',
-                    title: '检索',
-                    url: defaultPath.root
-                },
-                {
-                    key: 'workSub2_children2',
-                    label: '编写',
-                    title: '编写',
-                    url: defaultPath.root
-                },
-                {
-                    key: 'workSub2_children3',
-                    label: '申请',
-                    title: '申请',
-                    url: defaultPath.root
+            label: item.name,
+            title: item.name,
+            children: []
+        };
+
+        if (item.children) {
+            const childrenArray = [];
+            item.children.forEach(childrenItem => {
+                const childrenData = {
+                    key: childrenItem.id,
+                    label: childrenItem.name,
+                    title: childrenItem.name,
+                    url: childrenItem.url
                 }
-            ]
-        },
-    {
-        key: 'workSub3',
-        icon: () => h(PieChartOutlined),
-        label: '文件',
-        title: '文件',
-        children: [
-            {
-                key: 'workSub3_children1',
-                label: '文件管理',
-                title: '文件管理',
-                url: defaultPath.fileManagement,
-            }
-        ]
-    },
-    ]
-)
+                childrenArray.push(childrenData)
+            })
+            data.children = childrenArray
+        }
+        // return data;
+        defaultWorkSubNavMenuItems.value.push(data)
+    })
+})
 
-export const defaultEntertainmentSubNavMenuItems = reactive([
-        {
-            key: 'entertainmentSub1',
+export const defaultEntertainmentSubNavMenuItems = ref([])
+// @ts-ignore
+await getMenuListByParentId(134).then(response => {
+    response.data.content.forEach(item => {
+        const data = {
+            key: item.id,
             icon: () => h(PieChartOutlined),
-            label: '游戏',
-            title: '游戏',
-            children: [
-                {
-                    key: 'entertainmentSub1_children1',
-                    label: '英雄联盟',
-                    title: '英雄联盟',
-                    url: defaultPath.root
-                },
-                {
-                    key: 'entertainmentSub1_children2',
-                    label: '塞尔达',
-                    title: '塞尔达',
-                    url: defaultPath.zelda
-                },
-            ]
-        },
-        {
-            key: 'entertainmentSub2',
-            icon: () => h(PieChartOutlined),
-            label: '其他',
-            title: '其他',
-            children: [
-                {
-                    key: 'entertainmentSub2_children1',
-                    label: '抖音',
-                    title: '抖音',
-                    url: defaultPath.root
-                },
-                {
-                    key: 'entertainmentSub2_children2',
-                    label: '网购',
-                    title: '网购',
-                    url: defaultPath.root
+            label: item.name,
+            title: item.name,
+            children: []
+        };
+
+        if (item.children) {
+            const childrenArray = []
+            item.children.forEach(childrenItem => {
+                const childrenData = {
+                    key: childrenItem.id,
+                    label: childrenItem.name,
+                    title: childrenItem.name,
+                    url: childrenItem.url
                 }
-            ]
-        },
-    ]
-)
+                childrenArray.push(childrenData)
+            })
+            data.children = childrenArray
+        }
+        // return data;
+        defaultEntertainmentSubNavMenuItems.value.push(data)
+    })
+})
 
-export const defaultConfigSubNavMenuItems = reactive([
-    {
-        key: 'configSub1',
-        icon: () => h(PieChartOutlined),
-        label: '网站配置',
-        title: '网站配置',
-        children: [
-            {
-                key: 'configSub1_children1',
-                label: '网站配置',
-                title: '网站配置',
-                url: defaultPath.websitesConfig
-            }
-        ]
-    }
-    ]
-)
+export const defaultConfigSubNavMenuItems = ref([])
+// @ts-ignore
+await getMenuListByParentId(135).then(response => {
+    response.data.content.forEach(item => {
+        const data = {
+            key: item.id,
+            icon: () => h(PieChartOutlined),
+            label: item.name,
+            title: item.name,
+            children: []
+        };
+
+        if (item.children) {
+            const childrenArray = []
+            item.children.forEach(childrenItem => {
+                const childrenData = {
+                    key: childrenItem.id,
+                    label: childrenItem.name,
+                    title: childrenItem.name,
+                    url: childrenItem.url
+                }
+                childrenArray.push(childrenData)
+            })
+            data.children = childrenArray
+        }
+        // return data;
+        defaultConfigSubNavMenuItems.value.push(data)
+    })
+})
 
 
 // @ts-ignore
 export const defaultNavKeyMap = new Map()
-defaultNavKeyMap.set(132, defaultLifeSubNavMenuItems)
-defaultNavKeyMap.set(133, defaultWorkSubNavMenuItems)
-defaultNavKeyMap.set(134, defaultEntertainmentSubNavMenuItems)
-defaultNavKeyMap.set(135, defaultConfigSubNavMenuItems)
+defaultNavKeyMap.set(132, reactive(defaultLifeSubNavMenuItems))
+defaultNavKeyMap.set(133, reactive(defaultWorkSubNavMenuItems))
+defaultNavKeyMap.set(134, reactive(defaultEntertainmentSubNavMenuItems))
+defaultNavKeyMap.set(135, reactive(defaultConfigSubNavMenuItems))

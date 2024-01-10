@@ -58,6 +58,13 @@ public class MenuService {
         return this.menuRepository.findAll(booleanBuilder, pageable);
     }
 
+    public Page<Menu> queryByParent(Long parentId, String keyword, Pageable pageable) {
+        BooleanBuilder booleanBuilder = generateBooleanBuilder(keyword);
+        QMenu qMenu = QMenu.menu;
+        booleanBuilder.and(qMenu.parent.id.eq(parentId));
+        return this.menuRepository.findAll(booleanBuilder, pageable);
+    }
+
     private BooleanBuilder generateBooleanBuilder(String keyword) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QMenu qMenu = QMenu.menu;
