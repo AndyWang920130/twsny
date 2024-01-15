@@ -39,7 +39,7 @@ const instance = axios.create({
     // baseURL: process.env.VUE_APP_TEST_BASE_API,
     // baseURL: process.env.VUE_APP_TEST_BASE_API,
     baseURL: apiUrl,
-    timeout: 3500,  //响应时间
+    timeout: 10000,  //响应时间
     headers: {}
 })
 

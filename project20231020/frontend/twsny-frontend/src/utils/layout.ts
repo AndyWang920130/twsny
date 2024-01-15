@@ -2,6 +2,7 @@ import {h, reactive, Ref, ref} from "vue";
 import {PieChartOutlined} from "@ant-design/icons-vue";
 import {defaultPath} from "../router"
 import {getMenuListByParentId, getRootMenuList} from "../service/menu";
+import {addWebsite} from "../service/website";
 
 interface navMenuItem {
     key: string,
@@ -9,144 +10,100 @@ interface navMenuItem {
     title: string
 }
 
-export const defaultNavMenuItems : Ref<navMenuItem[]> = ref([])
+interface subMenuIChildrenItem {
+    key: string,
+    label: string,
+    title: string,
+    url: string
+}
+
+interface subMenuItem {
+    key: string,
+    icon: any,
+    label: string,
+    title: string,
+    children: Array<subMenuIChildrenItem>
+}
+
 // @ts-ignore
-await getRootMenuList().then(response => {
-    response.data.content.forEach(item => {
-        const data = {
-            key: item.id,
-            label: item.name,
-            title: item.name,
-        };
-        // return data;
-        defaultNavMenuItems.value.push(data)
+const initNavMenu = async () => {
+    const defaultNavMenuItems: Ref<navMenuItem[]> = ref([])
+    await getRootMenuList().then(response => {
+        response.data.content.forEach(item => {
+            const data = {
+                key: item.id,
+                label: item.name,
+                title: item.name,
+            };
+            // return data;
+            defaultNavMenuItems.value.push(data)
+        })
     })
-})
+    return defaultNavMenuItems
+}
 
-export const defaultLifeSubNavMenuItems = ref([])
 // @ts-ignore
-await getMenuListByParentId(132).then(response => {
-    response.data.content.forEach(item => {
-        const data = {
-            key: item.id,
-            icon: () => h(PieChartOutlined),
-            label: item.name,
-            title: item.name,
-            children: []
-        };
+export const defaultNavMenuItems = await initNavMenu()
 
-        if (item.children) {
-            const childrenArray = []
-            item.children.forEach(childrenItem => {
-                const childrenData = {
-                    key: childrenItem.id,
-                    label: childrenItem.name,
-                    title: childrenItem.name,
-                    url: childrenItem.url
-                }
-                childrenArray.push(childrenData)
-            })
-            data.children = childrenArray
-        }
-        // return data;
-        defaultLifeSubNavMenuItems.value.push(data)
+const initSubMenu = async (parentId: number) => {
+    const subNavMenuItems: Ref<subMenuItem[]> = ref([])
+    await getMenuListByParentId(parentId).then(response => {
+        response.data.content.forEach(item => {
+            const data = {
+                key: item.id,
+                icon: () => h(PieChartOutlined),
+                label: item.name,
+                title: item.name,
+                children: []
+            };
+
+            if (item.children) {
+                const childrenArray = []
+                item.children.forEach(childrenItem => {
+                    const childrenData = {
+                        key: childrenItem.id,
+                        label: childrenItem.name,
+                        title: childrenItem.name,
+                        url: childrenItem.url
+                    }
+                    childrenArray.push(childrenData)
+                })
+                data.children.push(...childrenArray)
+            }
+            subNavMenuItems.value.push(data)
+        })
     })
-})
+    return subNavMenuItems;
+}
 
-export const defaultWorkSubNavMenuItems = ref([])
 // @ts-ignore
-await getMenuListByParentId(133).then(response => {
-    response.data.content.forEach(item => {
-        const data = {
-            key: item.id,
-            icon: () => h(PieChartOutlined),
-            label: item.name,
-            title: item.name,
-            children: []
-        };
+const defaultLifeSubNavMenuItems = await initSubMenu(132)
 
-        if (item.children) {
-            const childrenArray = [];
-            item.children.forEach(childrenItem => {
-                const childrenData = {
-                    key: childrenItem.id,
-                    label: childrenItem.name,
-                    title: childrenItem.name,
-                    url: childrenItem.url
-                }
-                childrenArray.push(childrenData)
-            })
-            data.children = childrenArray
-        }
-        // return data;
-        defaultWorkSubNavMenuItems.value.push(data)
-    })
-})
-
-export const defaultEntertainmentSubNavMenuItems = ref([])
 // @ts-ignore
-await getMenuListByParentId(134).then(response => {
-    response.data.content.forEach(item => {
-        const data = {
-            key: item.id,
-            icon: () => h(PieChartOutlined),
-            label: item.name,
-            title: item.name,
-            children: []
-        };
+const defaultWorkSubNavMenuItems = await initSubMenu(133)
 
-        if (item.children) {
-            const childrenArray = []
-            item.children.forEach(childrenItem => {
-                const childrenData = {
-                    key: childrenItem.id,
-                    label: childrenItem.name,
-                    title: childrenItem.name,
-                    url: childrenItem.url
-                }
-                childrenArray.push(childrenData)
-            })
-            data.children = childrenArray
-        }
-        // return data;
-        defaultEntertainmentSubNavMenuItems.value.push(data)
-    })
-})
-
-export const defaultConfigSubNavMenuItems = ref([])
 // @ts-ignore
-await getMenuListByParentId(135).then(response => {
-    response.data.content.forEach(item => {
-        const data = {
-            key: item.id,
-            icon: () => h(PieChartOutlined),
-            label: item.name,
-            title: item.name,
-            children: []
-        };
+const defaultEntertainmentSubNavMenuItems = await initSubMenu(134)
 
-        if (item.children) {
-            const childrenArray = []
-            item.children.forEach(childrenItem => {
-                const childrenData = {
-                    key: childrenItem.id,
-                    label: childrenItem.name,
-                    title: childrenItem.name,
-                    url: childrenItem.url
-                }
-                childrenArray.push(childrenData)
-            })
-            data.children = childrenArray
-        }
-        // return data;
-        defaultConfigSubNavMenuItems.value.push(data)
-    })
-})
+// @ts-ignore
+const defaultConfigSubNavMenuItems = await initSubMenu(135)
+
+console.log("defaultNavMenuItems: ", defaultNavMenuItems)
+console.log("defaultLifeSubNavMenuItems: ", defaultLifeSubNavMenuItems)
+console.log("defaultWorkSubNavMenuItems: ", defaultWorkSubNavMenuItems)
+console.log("defaultEntertainmentSubNavMenuItems: ", defaultEntertainmentSubNavMenuItems)
+console.log("defaultConfigSubNavMenuItems: ", defaultConfigSubNavMenuItems)
 
 
 // @ts-ignore
-export const defaultNavKeyMap = new Map()
-defaultNavKeyMap.set(132, reactive(defaultLifeSubNavMenuItems))
-defaultNavKeyMap.set(133, reactive(defaultWorkSubNavMenuItems))
-defaultNavKeyMap.set(134, reactive(defaultEntertainmentSubNavMenuItems))
-defaultNavKeyMap.set(135, reactive(defaultConfigSubNavMenuItems))
+export const getSubNavMenuItems = (key: string) => {
+    if (key == '132') return defaultLifeSubNavMenuItems;
+    if (key == '133') return defaultWorkSubNavMenuItems;
+    if (key == '134') return defaultEntertainmentSubNavMenuItems;
+    if (key == '135') return defaultConfigSubNavMenuItems;
+}
+// defaultNavKeyMap.set('132', defaultLifeSubNavMenuItems)
+// defaultNavKeyMap.set('133', defaultWorkSubNavMenuItems)
+// defaultNavKeyMap.set('134', defaultEntertainmentSubNavMenuItems)
+// defaultNavKeyMap.set('135', defaultConfigSubNavMenuItems)
+

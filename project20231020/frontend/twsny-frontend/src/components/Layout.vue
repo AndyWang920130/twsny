@@ -53,29 +53,51 @@ import AntWebsitesTable from "./life/website/WebsitesManagement.vue";
 
 import {
   defaultNavMenuItems,
-  defaultLifeSubNavMenuItems,
-  defaultWorkSubNavMenuItems,
-  defaultEntertainmentSubNavMenuItems,
-  defaultNavKeyMap
+  getSubNavMenuItems
 } from "../utils/layout"
 import {useRouter} from "vue-router";
 const router = useRouter()
 
 
 // const path = defaultPath
-const navMenuItems = defaultNavMenuItems
-const navKeyMap = defaultNavKeyMap
+const navMenuItems = ref([]);
+// const navKeyMap = defaultNavKeyMap
 
-const navSelected = ref(navMenuItems.value[0]);
-const navSelectedKeys = ref<string[]>([navSelected.value.key]);
-
+const navSelected = ref();
+const navSelectedKeys = ref<string[]>([]);
 const breadcrumbArr : Ref<string[]> = ref([]);
 
-const subNavMenuItems = ref(navKeyMap.get(navSelectedKeys.value[0]))
-const subNavOpened = ref(subNavMenuItems.value[0])
-const openKeys = ref([subNavOpened.value.key]);
-const subNavSelected = ref(subNavOpened.value.children[0])
-const subNavSelectedKeys = ref<string[]>([subNavSelected.value.key]);
+const subNavMenuItems = ref([]);
+const subNavOpened = ref()
+const openKeys = ref([]);
+const subNavSelected = ref()
+const subNavSelectedKeys = ref<string[]>([]);
+
+// const navSelected = ref();
+// const navSelectedKeys = ref<string[]>([]);
+//
+// const breadcrumbArr : Ref<string[]> = ref([]);
+//
+// const subNavMenuItems = ref([])
+// const subNavOpened  = ref([])
+// const openKeys = ref([]);
+// const subNavSelected = ref()
+// const subNavSelectedKeys = ref<string[]>([]);
+const initSelectedData = (selectedKeys : String) => {
+  navSelectedKeys.value.push(selectedKeys)
+  subNavMenuItems.value.splice(0)
+  subNavMenuItems.value.push(...getSubNavMenuItems(navSelectedKeys.value[0]).value)
+  subNavOpened.value = subNavMenuItems.value[0]
+  openKeys.value.push(subNavOpened.value.key)
+  subNavSelected.value = subNavOpened.value.children[0]
+  subNavSelectedKeys.value.push(subNavSelected.value.key)
+}
+
+const initData = () => {
+  navMenuItems.value.push(...defaultNavMenuItems.value)
+  navSelected.value = defaultNavMenuItems.value[0]
+  initSelectedData(navSelected.value.key)
+}
 
 const initBreadcrumb = () => {
   breadcrumbArr.value.splice(0)
@@ -88,7 +110,9 @@ const initBreadcrumb = () => {
   breadcrumbArr.value.push(breadcrumb3)
 }
 
+
 const init = () => {
+  initData()
   initBreadcrumb()
   router.push(subNavSelected.value.url)
 }
@@ -96,12 +120,14 @@ const init = () => {
 init()
 
 const navMenuSelected = (menu) => {
-  navSelected.value = navMenuItems.value.filter(item => menu.key === item.key)[0]
-  subNavMenuItems.value = navKeyMap.get(navSelected.value.key)
-  subNavOpened.value = subNavMenuItems.value[0]
-  subNavSelected.value = subNavOpened.value.children[0]
+  navSelected.value = defaultNavMenuItems.value.filter(item => menu.key === item.key)[0]
+  initSelectedData(navSelected.value.key)
+  // subNavMenuItems.value = reactive(navKeyMap.get(navSelected.value.key))
+  // subNavOpened.value = subNavMenuItems.value[0]
+  // subNavSelected.value = subNavOpened.value.children[0]
+
   // subNavSelectedKeys.value = subNavMenuItems.value[0].children ? subNavMenuItems.value[0].children[0].key : subNavMenuItems.value[0].key
-  initBreadcrumb()
+  // initBreadcrumb()
 }
 
 const subNavMenuOpenChanged = (openKeys, openKey) => {
