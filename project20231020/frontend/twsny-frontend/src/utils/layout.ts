@@ -102,8 +102,4 @@ export const getSubNavMenuItems = (key: string) => {
     if (key == '134') return defaultEntertainmentSubNavMenuItems;
     if (key == '135') return defaultConfigSubNavMenuItems;
 }
-// defaultNavKeyMap.set('132', defaultLifeSubNavMenuItems)
-// defaultNavKeyMap.set('133', defaultWorkSubNavMenuItems)
-// defaultNavKeyMap.set('134', defaultEntertainmentSubNavMenuItems)
-// defaultNavKeyMap.set('135', defaultConfigSubNavMenuItems)
 

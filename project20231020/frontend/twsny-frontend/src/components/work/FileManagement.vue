@@ -16,8 +16,15 @@
               v-model:value="editableData[record.key][column.dataIndex]"
               style="margin: -5px 0"
             />
-            <template v-else>
+
+            <template v-else-if="record.fileManagementType === 'FOLDER'">
               <a-button type="link" style="margin: -5px 0" @click="handleFolderClick(record.id)">{{ text }}</a-button>
+            </template>
+
+            <template v-else-if="record.fileManagementType === 'FILE'">
+<!--              <a-button type="link" style="margin: -5px 0" @click="downloadIframe('http://localhost:8080/api/v1/resources/' + record.name)">{{ text }}</a-button>-->
+<!--              <a-button type="link" style="margin: -5px 0" @click="downloadIframe('https://shanghaiaedobs.obs.cn-east-3.myhuaweicloud.com:443/tog/template/%E5%BF%97%E6%84%BF%E8%80%85%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF.xlsx')">{{ text }}</a-button>-->
+              <a-button type="link" style="margin: -5px 0" @click="openFile('http://localhost:8080/api/v1/resources/' + record.name)">{{ text }}</a-button>
             </template>
           </a-space>
 
@@ -265,6 +272,21 @@ const handleFolderClick = (id: number) => {
   // router.push(defaultPath.clothes)
   init()
 }
+
+const downloadIframe = (url: string) => {
+  const iframe = document.createElement("iframe");
+  iframe.style.display = "none"; // 防止影响页面
+  iframe.style.height = "0"; // 防止影响页面
+  iframe.src = url;
+  document.body.appendChild(iframe); // 这一行必须，iframe挂在到dom树上才会发请求
+  setTimeout(() => {
+    iframe.remove();
+  }, 5 * 60 * 1000);
+};
+
+const openFile = (url: string) => {
+  window.open(url)
+};
 
 </script>
 <style lang="less" scoped>
