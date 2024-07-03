@@ -52,8 +52,8 @@ import Card from "./Card.vue";
 import AntWebsitesTable from "./life/website/WebsitesManagement.vue";
 
 import {
-  defaultNavMenuItems,
-  getSubNavMenuItems
+  // defaultNavMenuItems,
+  // getSubNavMenuItems
 } from "../utils/layout"
 import {useRouter} from "vue-router";
 const router = useRouter()
@@ -72,17 +72,6 @@ const subNavOpened = ref()
 const openKeys = ref([]);
 const subNavSelected = ref()
 const subNavSelectedKeys = ref<string[]>([]);
-
-// const navSelected = ref();
-// const navSelectedKeys = ref<string[]>([]);
-//
-// const breadcrumbArr : Ref<string[]> = ref([]);
-//
-// const subNavMenuItems = ref([])
-// const subNavOpened  = ref([])
-// const openKeys = ref([]);
-// const subNavSelected = ref()
-// const subNavSelectedKeys = ref<string[]>([]);
 const initSelectedData = (selectedKeys : String) => {
   navSelectedKeys.value.push(selectedKeys)
   subNavMenuItems.value.splice(0)

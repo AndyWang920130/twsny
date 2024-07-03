@@ -34,7 +34,7 @@ public class SystemConfigResource {
      */
     @GetMapping
     public ResponseEntity<Page<SystemConfig>> queryByPage(@RequestParam(required = false) String keyword,
-                                                          @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+                                                          @PageableDefault(sort = {"category, id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(this.systemConfigService.queryByPage(keyword, pageable));
     }
 

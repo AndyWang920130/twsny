@@ -43,7 +43,7 @@ const initNavMenu = async () => {
 }
 
 // @ts-ignore
-export const defaultNavMenuItems = await initNavMenu()
+// export const defaultNavMenuItems = await initNavMenu()
 
 const initSubMenu = async (parentId: number) => {
     const subNavMenuItems: Ref<subMenuItem[]> = ref([])
@@ -77,29 +77,29 @@ const initSubMenu = async (parentId: number) => {
 }
 
 // @ts-ignore
-const defaultLifeSubNavMenuItems = await initSubMenu(132)
+// const defaultLifeSubNavMenuItems = await initSubMenu(132)
 
 // @ts-ignore
-const defaultWorkSubNavMenuItems = await initSubMenu(133)
+// const defaultWorkSubNavMenuItems = await initSubMenu(133)
 
 // @ts-ignore
-const defaultEntertainmentSubNavMenuItems = await initSubMenu(134)
+// const defaultEntertainmentSubNavMenuItems = await initSubMenu(134)
 
 // @ts-ignore
-const defaultConfigSubNavMenuItems = await initSubMenu(135)
+// const defaultConfigSubNavMenuItems = await initSubMenu(135)
 
-console.log("defaultNavMenuItems: ", defaultNavMenuItems)
-console.log("defaultLifeSubNavMenuItems: ", defaultLifeSubNavMenuItems)
-console.log("defaultWorkSubNavMenuItems: ", defaultWorkSubNavMenuItems)
-console.log("defaultEntertainmentSubNavMenuItems: ", defaultEntertainmentSubNavMenuItems)
-console.log("defaultConfigSubNavMenuItems: ", defaultConfigSubNavMenuItems)
+// console.log("defaultNavMenuItems: ", defaultNavMenuItems)
+// console.log("defaultLifeSubNavMenuItems: ", defaultLifeSubNavMenuItems)
+// console.log("defaultWorkSubNavMenuItems: ", defaultWorkSubNavMenuItems)
+// console.log("defaultEntertainmentSubNavMenuItems: ", defaultEntertainmentSubNavMenuItems)
+// console.log("defaultConfigSubNavMenuItems: ", defaultConfigSubNavMenuItems)
 
 
 // @ts-ignore
-export const getSubNavMenuItems = (key: string) => {
-    if (key == '132') return defaultLifeSubNavMenuItems;
-    if (key == '133') return defaultWorkSubNavMenuItems;
-    if (key == '134') return defaultEntertainmentSubNavMenuItems;
-    if (key == '135') return defaultConfigSubNavMenuItems;
-}
+// export const getSubNavMenuItems = (key: string) => {
+//     if (key == '132') return defaultLifeSubNavMenuItems;
+//     if (key == '133') return defaultWorkSubNavMenuItems;
+//     if (key == '134') return defaultEntertainmentSubNavMenuItems;
+//     if (key == '135') return defaultConfigSubNavMenuItems;
+// }
 

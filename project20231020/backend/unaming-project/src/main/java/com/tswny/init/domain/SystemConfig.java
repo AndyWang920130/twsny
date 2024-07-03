@@ -11,6 +11,7 @@ public class SystemConfig extends AbstractAuditingEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String category;
     private String itemKey;
     private String itemValue;
 
@@ -36,5 +37,13 @@ public class SystemConfig extends AbstractAuditingEntity {
 
     public void setItemValue(String itemValue) {
         this.itemValue = itemValue;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

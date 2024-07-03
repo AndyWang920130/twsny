@@ -28,7 +28,7 @@ import FileManagement from "./components/work/FileManagement.vue";
 
 
 // let app;
-const app = createApp(App)
+// const app = createApp(App)
 // createApp(App2).mount('#app')
 // createApp(Persons).mount('#app')
 // createApp(FetchData).mount('#app')
@@ -40,8 +40,9 @@ const app = createApp(App)
 // app = createApp(Add)
 // app = createApp(Image)
 // app = createApp(FileUploadTest)
-// app = createApp(App1)
+// const app = createApp(App1)
 // app = createApp(Modal)
+const app = createApp(HelloWord)
 //整个应用支持路由。
 app.use(router)
 

@@ -49,11 +49,6 @@ const routes : Array<RouteRecordRaw> =
             name: 'Clothes',
             component: Clothes
         },
-        // {
-        //     path: '/fileManagement',
-        //     name: 'FileManagement',
-        //     component: FileManagement
-        // },
         {
             path: '/fileManagement/:folderId*',
             name: 'FileManagement',
