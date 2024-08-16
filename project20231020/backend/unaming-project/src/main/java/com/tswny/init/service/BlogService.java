@@ -1,13 +1,18 @@
 package com.tswny.init.service;
 
 import com.querydsl.core.BooleanBuilder;
+import com.tswny.init.domain.User;
+import com.tswny.init.domain.enumeration.BlogOpenStateEnum;
 import com.tswny.init.domain.homepage.Blog;
 import com.tswny.init.domain.homepage.QBlog;
 import com.tswny.init.handler.exception.BadRequestException;
 import com.tswny.init.repository.BlogRepository;
+import com.tswny.init.repository.UserRepository;
+import com.tswny.init.security.UserHelper;
 import com.tswny.init.service.dto.BlogDTO;
 import com.tswny.init.service.mapper.BlogMapper;
 import com.tswny.init.service.util.CommonUtil;
+import com.tswny.init.util.SecurityUtils;
 import com.tswny.init.web.rest.vm.BlogVM;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -27,11 +32,15 @@ import java.util.Optional;
 @Service
 public class BlogService {
     private final BlogRepository blogRepository;
+    private final UserRepository userRepository;
     private final BlogMapper blogMapper;
+    private final UserHelper userHelper;
 
-    public BlogService(BlogRepository blogRepository, BlogMapper blogMapper) {
+    public BlogService(BlogRepository blogRepository, UserRepository userRepository, BlogMapper blogMapper, UserHelper userHelper) {
         this.blogRepository = blogRepository;
+        this.userRepository = userRepository;
         this.blogMapper = blogMapper;
+        this.userHelper = userHelper;
     }
 
     /**
@@ -51,9 +60,34 @@ public class BlogService {
      *
      * @return 查询结果
      */
-    public Page<BlogDTO> queryByPage(String category, String keyword, Pageable pageable) {
+    public Page<BlogDTO> queryBlogsByPage(String category, String keyword, BlogOpenStateEnum blogOpenState, Pageable pageable) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QBlog qBlog = QBlog.blog;
+
+        if (blogOpenState != null) {
+            booleanBuilder.and(qBlog.openState.eq(blogOpenState));
+        }
+
+        if (StringUtils.isNotBlank(category)) {
+            booleanBuilder.and(qBlog.category.eq(category));
+        }
+        if (StringUtils.isNotBlank(keyword)) {
+            booleanBuilder.andAnyOf(qBlog.remark.like("%" + keyword + "%" )
+                    .or(qBlog.tag.like("%" + keyword + "%" )));
+        }
+        return this.blogRepository.findAll(booleanBuilder, pageable).map(blogMapper::toDto);
+    }
+
+
+    public Page<BlogDTO> queryUserBlogsByPage(String category, String keyword, Pageable pageable) {
+        User user = userHelper.getCurrentUser();
+
+        if (user == null) throw new BadRequestException("登录用户为空");
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QBlog qBlog = QBlog.blog;
+        booleanBuilder.and(qBlog.user.eq(user));
+
         if (StringUtils.isNotBlank(category)) {
             booleanBuilder.and(qBlog.category.eq(category));
         }
@@ -72,6 +106,10 @@ public class BlogService {
     public Blog insert(BlogVM blogVM) {
         blogVM.setRemark(CommonUtil.generateBlogRemark(blogVM));
         Blog blog = blogMapper.toEntity(blogVM);
+        User user = userHelper.getCurrentUser();
+        if (user != null) {
+            blog.setUser(user);
+        }
         return this.blogRepository.save(blog);
     }
 

@@ -1,10 +1,10 @@
 spring:
   application:
-    name: aedms
+    name: twsny
   datasource:
     url: jdbc:mysql://121.37.190.253:3306/twsny?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-    username: rw_user
-    password: mi8^gXP$KBTH
+    username: root
+    password: 62995391jxaed
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

@@ -1,11 +1,11 @@
 package com.tswny.init.domain.homepage;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tswny.init.domain.AbstractAuditingEntity;
+import com.tswny.init.domain.User;
+import com.tswny.init.domain.enumeration.BlogOpenStateEnum;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Blog extends AbstractAuditingEntity {
@@ -22,6 +22,12 @@ public class Blog extends AbstractAuditingEntity {
     private String remark;
 
     private String tag;
+
+    @Enumerated(EnumType.STRING)
+    private BlogOpenStateEnum openState = BlogOpenStateEnum.PRIVATE;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
     public void setId(Long id) {
         this.id = id;
@@ -69,5 +75,21 @@ public class Blog extends AbstractAuditingEntity {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public BlogOpenStateEnum getOpenState() {
+        return openState;
+    }
+
+    public void setOpenState(BlogOpenStateEnum openState) {
+        this.openState = openState;
     }
 }

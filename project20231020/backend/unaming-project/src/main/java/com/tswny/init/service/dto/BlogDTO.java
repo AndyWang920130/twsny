@@ -1,5 +1,7 @@
 package com.tswny.init.service.dto;
 
+import com.tswny.init.domain.enumeration.BlogOpenStateEnum;
+
 import java.util.List;
 
 public class BlogDTO {
@@ -14,6 +16,10 @@ public class BlogDTO {
     private String remark;
 
     private List<String> tagList;
+
+    private BlogOpenStateEnum openState;
+
+    private Long userId;
 
     public Long getId() {
         return id;
@@ -61,5 +67,21 @@ public class BlogDTO {
 
     public void setTagList(List<String> tagList) {
         this.tagList = tagList;
+    }
+
+    public BlogOpenStateEnum getOpenState() {
+        return openState;
+    }
+
+    public void setOpenState(BlogOpenStateEnum openState) {
+        this.openState = openState;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

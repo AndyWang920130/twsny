@@ -16,6 +16,11 @@ public class CustomFileHandlerConfiguration implements WebMvcConfigurer {
     @Value("${file.upload.location}")
     public String location;
 
+    /**
+     * 用于配置静态资源请求, 指定某个路径模式下的请求（即 /api/v1/resources/**）
+     * 应该从指定的资源位置（location）加载静态资源。
+     * @param registry
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //将所有F:/resources/目录下的资源,访问时都映射到/res/** 路径下

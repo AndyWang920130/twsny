@@ -1,5 +1,7 @@
 package com.tswny.init.web.rest.vm;
 
+import com.tswny.init.domain.enumeration.BlogOpenStateEnum;
+
 import java.util.List;
 
 public class BlogVM {
@@ -14,6 +16,8 @@ public class BlogVM {
     private String remark;
 
     private List<String> tagList;
+
+    private BlogOpenStateEnum openState;
 
     public Long getId() {
         return id;
@@ -61,5 +65,13 @@ public class BlogVM {
 
     public void setTagList(List<String> tagList) {
         this.tagList = tagList;
+    }
+
+    public BlogOpenStateEnum getOpenState() {
+        return openState;
+    }
+
+    public void setOpenState(BlogOpenStateEnum openState) {
+        this.openState = openState;
     }
 }

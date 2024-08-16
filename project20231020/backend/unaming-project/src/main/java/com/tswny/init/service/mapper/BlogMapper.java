@@ -8,11 +8,21 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {CustomFormatter.class})
+@Mapper(componentModel = "spring", uses = {CustomFormatter.class, UserMapper.class})
 public interface BlogMapper extends EntityMapper<BlogDTO, Blog>{
     @Mapping(source = "tagList", target = "tag", qualifiedByName = "ListToString")
     Blog toEntity(BlogVM blogVM);
 
     @Mapping(source = "tag", target = "tagList", qualifiedByName = "StringToList")
+    @Mapping(source = "user.id", target = "userId")
     BlogDTO toDto(Blog blog);
+
+    default Blog fromId(Long id) {
+        if (id == null) {
+            return null;
+        }
+        Blog blog = new Blog();
+        blog.setId(id);
+        return blog;
+    }
 }

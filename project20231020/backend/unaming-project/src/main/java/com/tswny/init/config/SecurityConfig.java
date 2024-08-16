@@ -1,10 +1,11 @@
 package com.tswny.init.config;
 
-import com.tswny.init.filter.security.CustomTenantFilter;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.tswny.init.filter.security.CustomUsernamePasswordAuthenticationFilter;
 import com.tswny.init.filter.security.JwtFilter;
-import com.tswny.init.service.CustomUserDetailService;
+import com.tswny.init.security.CustomUserDetailService;
 import com.tswny.init.service.UserService;
+import com.tswny.init.service.dto.LoginResponseDTO;
 import com.tswny.init.util.JwtTokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
@@ -64,7 +64,7 @@ public class SecurityConfig {
                  // 添加自定义过滤器
                 // .addFilterBefore(new CustomTenantFilter(), AuthorizationFilter.class)
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                     .authenticationEntryPoint(securityProblemSupport)
                     .accessDeniedHandler(securityProblemSupport)
@@ -96,7 +96,7 @@ public class SecurityConfig {
                     .successHandler(successHandler());
 //                .failureHandler()
                 // 成功后跳转页面
-                // .defaultSuccessUrl("/index.html");
+//                 .defaultSuccessUrl("/index.html");
         return http.build();
     }
 
@@ -148,10 +148,12 @@ public class SecurityConfig {
 //            log.info("用户[{}]于[{}]登录成功!", userDetail.getUser().getUsername(), new Date());
 //            WriteResponse.write(httpServletResponse, new SuccessResponse());
             String token = JwtTokenUtil.getInstance().createToken(authentication, false);
-            // String result = JSON.toJSONString(loginResult, SerializerFeature.DisableCircularReferenceDetect);
+//             String result = JSON.toJSONString(loginResult, SerializerFeature.DisableCircularReferenceDetect);
 
+            LoginResponseDTO loginResponseDTO = new LoginResponseDTO(token);
             ServletOutputStream outputStream = response.getOutputStream();
-            outputStream.write(token.getBytes(StandardCharsets.UTF_8));
+            response.addHeader(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token);
+            outputStream.write(loginResponseDTO.toString().getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
             outputStream.close();
         };

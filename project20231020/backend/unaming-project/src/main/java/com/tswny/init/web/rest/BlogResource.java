@@ -1,11 +1,10 @@
 package com.tswny.init.web.rest;
 
-import com.tswny.init.domain.homepage.Blog;
+import com.tswny.init.domain.enumeration.BlogOpenStateEnum;
 import com.tswny.init.service.BlogService;
 import com.tswny.init.service.dto.BlogDTO;
 import com.tswny.init.web.rest.vm.BlogVM;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -39,7 +38,19 @@ public class BlogResource {
     public ResponseEntity<Page<BlogDTO>> queryByPage(@RequestParam(required = false) String category,
                                                      @RequestParam(required = false) String keyword,
                                                      @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok(this.blogService.queryByPage(category, keyword, pageable));
+        return ResponseEntity.ok(this.blogService.queryBlogsByPage(category, keyword, BlogOpenStateEnum.PUBLIC, pageable));
+    }
+
+    /**
+     * 分页查询
+     *
+     * @return 查询结果
+     */
+    @GetMapping("personal")
+    public ResponseEntity<Page<BlogDTO>> queryUserBlogsByPage(@RequestParam(required = false) String category,
+                                                         @RequestParam(required = false) String keyword,
+                                                         @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(this.blogService.queryUserBlogsByPage(category, keyword, pageable));
     }
 
     /**

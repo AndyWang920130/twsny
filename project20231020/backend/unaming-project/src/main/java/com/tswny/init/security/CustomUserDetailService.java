@@ -1,5 +1,6 @@
-package com.tswny.init.service;
+package com.tswny.init.security;
 
+import com.tswny.init.service.UserService;
 import com.tswny.init.service.dto.UserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
