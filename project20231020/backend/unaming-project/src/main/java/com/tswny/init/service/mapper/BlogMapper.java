@@ -13,6 +13,9 @@ public interface BlogMapper extends EntityMapper<BlogDTO, Blog>{
     @Mapping(source = "tagList", target = "tag", qualifiedByName = "ListToString")
     Blog toEntity(BlogVM blogVM);
 
+//    @Mapping(source = "tagList", target = "tag", qualifiedByName = "ListToString")
+//    void partialUpdate(Blog blog, BlogVM blogVM);
+
     @Mapping(source = "tag", target = "tagList", qualifiedByName = "StringToList")
     @Mapping(source = "user.id", target = "userId")
     BlogDTO toDto(Blog blog);

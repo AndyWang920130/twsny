@@ -124,7 +124,13 @@ public class BlogService {
         Optional<Blog> blogOptional = blogRepository.findById(id);
         if (!blogOptional.isPresent()) throw new BadRequestException("未能查询到实体");
         blogVM.setRemark(CommonUtil.generateBlogRemark(blogVM));
+//        Blog blog = blogOptional.get();
+//        blogMapper.partialUpdate(blog, blogVM);
         Blog blog = blogMapper.toEntity(blogVM);
+        User user = userHelper.getCurrentUser();
+        if (user != null) {
+            blog.setUser(user);
+        }
         return this.blogRepository.save(blog);
     }
 
