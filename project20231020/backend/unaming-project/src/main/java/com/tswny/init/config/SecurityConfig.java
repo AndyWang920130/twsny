@@ -80,6 +80,7 @@ public class SecurityConfig {
                     .authorizeHttpRequests(authorize -> authorize
                             // .antMatchers("/api/v1/authenticate/username").permitAll()
                             // .antMatchers("/api/v1/persons/**").hasRole("USER")
+                            .antMatchers("/api/v1/blogs/personal/**").authenticated()
                             .antMatchers("/api/v1/**").permitAll()
                             // .antMatchers("/api/v1/**").authenticated()
                     )

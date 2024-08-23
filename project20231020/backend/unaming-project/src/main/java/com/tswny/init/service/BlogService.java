@@ -6,13 +6,13 @@ import com.tswny.init.domain.enumeration.BlogOpenStateEnum;
 import com.tswny.init.domain.homepage.Blog;
 import com.tswny.init.domain.homepage.QBlog;
 import com.tswny.init.handler.exception.BadRequestException;
+import com.tswny.init.handler.exception.UnAuthorizedException;
 import com.tswny.init.repository.BlogRepository;
 import com.tswny.init.repository.UserRepository;
 import com.tswny.init.security.UserHelper;
 import com.tswny.init.service.dto.BlogDTO;
 import com.tswny.init.service.mapper.BlogMapper;
 import com.tswny.init.service.util.CommonUtil;
-import com.tswny.init.util.SecurityUtils;
 import com.tswny.init.web.rest.vm.BlogVM;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -107,9 +107,12 @@ public class BlogService {
         blogVM.setRemark(CommonUtil.generateBlogRemark(blogVM));
         Blog blog = blogMapper.toEntity(blogVM);
         User user = userHelper.getCurrentUser();
-        if (user != null) {
-            blog.setUser(user);
-        }
+        if (user == null) throw new UnAuthorizedException();
+        // if (user == null) throw new UnAuthorizedException1();
+        // if (user == null) throw new BadRequestException("unAuthorized");
+
+
+        blog.setUser(user);
         return this.blogRepository.save(blog);
     }
 
@@ -128,9 +131,7 @@ public class BlogService {
 //        blogMapper.partialUpdate(blog, blogVM);
         Blog blog = blogMapper.toEntity(blogVM);
         User user = userHelper.getCurrentUser();
-        if (user != null) {
-            blog.setUser(user);
-        }
+        if (user == null) throw new UnAuthorizedException();
         return this.blogRepository.save(blog);
     }
 
@@ -142,6 +143,8 @@ public class BlogService {
      */
     public boolean deleteById(Long id) {
         this.blogRepository.deleteById(id);
+        User user = userHelper.getCurrentUser();
+        if (user == null) throw new UnAuthorizedException();
         return true;
     }
 }

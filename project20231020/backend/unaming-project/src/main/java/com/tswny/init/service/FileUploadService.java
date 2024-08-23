@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -29,10 +30,11 @@ public class FileUploadService {
      */
     public String upload(MultipartFile file) {
         String fileName = file.getOriginalFilename();
+        String enCodeFileName = new String(fileName.getBytes(StandardCharsets.UTF_8));
         File filePath = new File(UPLOAD_ROOT_LOCATION);
         if (!filePath.exists()) filePath.mkdirs();
 
-        String relativeFileName = new Date().getTime() + "_" + fileName;
+        String relativeFileName = new Date().getTime() + "_" + enCodeFileName;
         File tempFile = new File(filePath, relativeFileName);
         try {
             FileOutputStream out = new FileOutputStream(tempFile);

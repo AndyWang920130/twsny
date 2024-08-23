@@ -81,7 +81,7 @@ public class ExceptionHandling implements ProblemHandling, SecurityAdviceTrait {
      * @param request
      * @return
      */
-    @ExceptionHandler(BadRequestException.class)
+    @ExceptionHandler
     public ResponseEntity<Problem> handleBadRequestExceptionException(BadRequestException ex, NativeWebRequest request) {
         StatusType statusType = ex.getStatus();
         return ResponseEntity.status(statusType.getStatusCode()).body(Problem.builder()
@@ -89,5 +89,18 @@ public class ExceptionHandling implements ProblemHandling, SecurityAdviceTrait {
                 .withStatus(statusType)
                 .withTitle(ex.getTitle())
                 .build());
+    }
+
+
+    @ExceptionHandler(UnAuthorizedException.class)
+    public ResponseEntity<Problem> handleUnAuthorizedException(UnAuthorizedException ex, NativeWebRequest request) {
+        System.out.println("###############handleUnAuthorizedException############");
+        StatusType statusType = ex.getStatus();
+        return ResponseEntity.status(statusType.getStatusCode()).body(Problem.builder()
+                .withDetail(ex.getTitle())
+                .withStatus(statusType)
+                .withTitle(ex.getTitle())
+                .build());
+
     }
 }
