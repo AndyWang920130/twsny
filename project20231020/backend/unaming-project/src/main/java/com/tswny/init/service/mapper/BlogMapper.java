@@ -13,11 +13,10 @@ public interface BlogMapper extends EntityMapper<BlogDTO, Blog>{
     @Mapping(source = "tagList", target = "tag", qualifiedByName = "ListToString")
     Blog toEntity(BlogVM blogVM);
 
-//    @Mapping(source = "tagList", target = "tag", qualifiedByName = "ListToString")
-//    void partialUpdate(Blog blog, BlogVM blogVM);
-
     @Mapping(source = "tag", target = "tagList", qualifiedByName = "StringToList")
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.realName", target = "userName")
+    @Mapping(source = "createdDate", target = "publishDate")
     BlogDTO toDto(Blog blog);
 
     default Blog fromId(Long id) {

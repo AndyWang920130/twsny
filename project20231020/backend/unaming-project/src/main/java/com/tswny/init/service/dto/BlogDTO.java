@@ -2,6 +2,7 @@ package com.tswny.init.service.dto;
 
 import com.tswny.init.domain.enumeration.BlogOpenStateEnum;
 
+import java.time.Instant;
 import java.util.List;
 
 public class BlogDTO {
@@ -20,6 +21,10 @@ public class BlogDTO {
     private BlogOpenStateEnum openState;
 
     private Long userId;
+
+    private String userName;
+
+    private Instant publishDate;
 
     public Long getId() {
         return id;
@@ -83,5 +88,21 @@ public class BlogDTO {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Instant getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(Instant publishDate) {
+        this.publishDate = publishDate;
     }
 }

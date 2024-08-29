@@ -132,6 +132,7 @@ public class BlogService {
         Blog blog = blogMapper.toEntity(blogVM);
         User user = userHelper.getCurrentUser();
         if (user == null) throw new UnAuthorizedException();
+        blog.setUser(user);
         return this.blogRepository.save(blog);
     }
 
