@@ -2,6 +2,8 @@ package com.tswny.init.service;
 
 import com.querydsl.core.BooleanBuilder;
 import com.tswny.init.domain.User;
+import com.tswny.init.domain.enumeration.BlogCollectStateEnum;
+import com.tswny.init.domain.enumeration.BlogLikeStateEnum;
 import com.tswny.init.domain.enumeration.BlogOpenStateEnum;
 import com.tswny.init.domain.homepage.Blog;
 import com.tswny.init.domain.homepage.QBlog;
@@ -13,10 +15,13 @@ import com.tswny.init.security.UserHelper;
 import com.tswny.init.service.dto.BlogDTO;
 import com.tswny.init.service.mapper.BlogMapper;
 import com.tswny.init.service.util.CommonUtil;
+import com.tswny.init.web.rest.vm.BlogCollectVM;
+import com.tswny.init.web.rest.vm.BlogLikeVM;
 import com.tswny.init.web.rest.vm.BlogVM;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,9 +65,13 @@ public class BlogService {
      *
      * @return 查询结果
      */
-    public Page<BlogDTO> queryBlogsByPage(String category, String keyword, BlogOpenStateEnum blogOpenState, Pageable pageable) {
+    public Page<BlogDTO> queryBlogsByPage(String userName, String category, String keyword, BlogOpenStateEnum blogOpenState, Pageable pageable) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QBlog qBlog = QBlog.blog;
+
+        if (StringUtils.isNotBlank(userName)) {
+            booleanBuilder.and(qBlog.user.login.eq(userName));
+        }
 
         if (blogOpenState != null) {
             booleanBuilder.and(qBlog.openState.eq(blogOpenState));
@@ -71,6 +80,7 @@ public class BlogService {
         if (StringUtils.isNotBlank(category)) {
             booleanBuilder.and(qBlog.category.eq(category));
         }
+
         if (StringUtils.isNotBlank(keyword)) {
             booleanBuilder.andAnyOf(qBlog.remark.like("%" + keyword + "%" )
                     .or(qBlog.tag.like("%" + keyword + "%" )));
@@ -79,7 +89,7 @@ public class BlogService {
     }
 
 
-    public Page<BlogDTO> queryUserBlogsByPage(String category, String keyword, Pageable pageable) {
+    public Page<BlogDTO> queryUserBlogsByPage(String category, BlogOpenStateEnum openState, String keyword, Pageable pageable) {
         User user = userHelper.getCurrentUser();
 
         if (user == null) throw new BadRequestException("登录用户为空");
@@ -91,6 +101,10 @@ public class BlogService {
         if (StringUtils.isNotBlank(category)) {
             booleanBuilder.and(qBlog.category.eq(category));
         }
+        if(openState != null) {
+            booleanBuilder.and(qBlog.openState.eq(openState));
+        }
+
         if (StringUtils.isNotBlank(keyword)) {
             booleanBuilder.andAnyOf(qBlog.remark.like("%" + keyword + "%" )
                     .or(qBlog.tag.like("%" + keyword + "%" )));
@@ -147,5 +161,61 @@ public class BlogService {
         User user = userHelper.getCurrentUser();
         if (user == null) throw new UnAuthorizedException();
         return true;
+    }
+
+    public void changeLikeState(BlogLikeVM blogLikeVM) {
+        Long blogId = blogLikeVM.getId();
+        if (blogId == null) throw new BadRequestException("id 不能为空");
+        Optional<Blog> blogOptional = blogRepository.findById(blogId);
+        if (!blogOptional.isPresent()) throw new BadRequestException("blog不存在");
+        Blog blog = blogOptional.get();
+        User user = userHelper.getCurrentUser();
+        BlogLikeStateEnum blogLikeStateEnum = blogLikeVM.getLikeState();
+        switch (blogLikeStateEnum) {
+            case like:
+                blog.getUsersLiked().add(user);
+                break;
+            case unlike:
+                blog.getUsersLiked().remove(user);
+                break;
+        }
+        blogRepository.save(blog);
+    }
+
+    public void changeCollectState(BlogCollectVM blogCollectVM) {
+        Long blogId = blogCollectVM.getId();
+        if (blogId == null) throw new BadRequestException("id 不能为空");
+        Optional<Blog> blogOptional = blogRepository.findById(blogId);
+        if (!blogOptional.isPresent()) throw new BadRequestException("blog不存在");
+        Blog blog = blogOptional.get();
+        User user = userHelper.getCurrentUser();
+
+        BlogCollectStateEnum blogCollectStateEnum = blogCollectVM.getCollectState();
+        switch (blogCollectStateEnum) {
+            case collect:
+                blog.getUsersCollected().add(user);
+                break;
+            case unCollect:
+                blog.getUsersCollected().remove(user);
+                break;
+        }
+
+        blogRepository.save(blog);
+    }
+
+    public boolean isLiked(Long blogId) {
+        Optional<Blog> blogOptional = blogRepository.findById(blogId);
+        if (!blogOptional.isPresent()) throw new BadRequestException("blog不存在");
+        Blog blog = blogOptional.get();
+        User user = userHelper.getCurrentUser();
+        return blog.getUsersLiked().contains(user);
+    }
+
+    public boolean isCollected(Long blogId) {
+        Optional<Blog> blogOptional = blogRepository.findById(blogId);
+        if (!blogOptional.isPresent()) throw new BadRequestException("blog不存在");
+        Blog blog = blogOptional.get();
+        User user = userHelper.getCurrentUser();
+        return blog.getUsersCollected().contains(user);
     }
 }

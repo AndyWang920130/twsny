@@ -3,6 +3,8 @@ package com.tswny.init.web.rest;
 import com.tswny.init.domain.enumeration.BlogOpenStateEnum;
 import com.tswny.init.service.BlogService;
 import com.tswny.init.service.dto.BlogDTO;
+import com.tswny.init.web.rest.vm.BlogCollectVM;
+import com.tswny.init.web.rest.vm.BlogLikeVM;
 import com.tswny.init.web.rest.vm.BlogVM;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +40,15 @@ public class BlogResource {
     public ResponseEntity<Page<BlogDTO>> queryByPage(@RequestParam(required = false) String category,
                                                      @RequestParam(required = false) String keyword,
                                                      @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok(this.blogService.queryBlogsByPage(category, keyword, BlogOpenStateEnum.PUBLIC, pageable));
+        return ResponseEntity.ok(this.blogService.queryBlogsByPage(null, category, keyword, BlogOpenStateEnum.PUBLIC, pageable));
+    }
+
+    @GetMapping("public")
+    public ResponseEntity<Page<BlogDTO>> queryPublicBlogsByPage(@RequestParam(required = false) String category,
+                                                                @RequestParam(required = false) String userName,
+                                                                @RequestParam(required = false) String keyword,
+                                                                @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(this.blogService.queryBlogsByPage(userName, category, keyword, BlogOpenStateEnum.PUBLIC, pageable));
     }
 
     /**
@@ -48,9 +58,10 @@ public class BlogResource {
      */
     @GetMapping("personal")
     public ResponseEntity<Page<BlogDTO>> queryUserBlogsByPage(@RequestParam(required = false) String category,
-                                                         @RequestParam(required = false) String keyword,
-                                                         @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok(this.blogService.queryUserBlogsByPage(category, keyword, pageable));
+                                                              @RequestParam(required = false) BlogOpenStateEnum openState,
+                                                              @RequestParam(required = false) String keyword,
+                                                              @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(this.blogService.queryUserBlogsByPage(category, openState, keyword, pageable));
     }
 
     /**
@@ -97,5 +108,29 @@ public class BlogResource {
         return ResponseEntity.ok(this.blogService.deleteById(id));
     }
 
+    @PutMapping("changeLikeState")
+    public ResponseEntity<Void> changeLikeState(@RequestBody @Valid BlogLikeVM blogLikeVM) {
+        this.blogService.changeLikeState(blogLikeVM);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("changeCollectState")
+    public ResponseEntity<Void> changeCollectState(@RequestBody @Valid BlogCollectVM blogCollectVM) {
+        this.blogService.changeCollectState(blogCollectVM);
+        return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("isLiked/{blogId}")
+    public ResponseEntity<Boolean> isLiked(@PathVariable Long blogId) {
+        boolean isLiked = this.blogService.isLiked(blogId);
+        return ResponseEntity.ok(isLiked);
+    }
+
+    @GetMapping("isCollected/{blogId}")
+    public ResponseEntity<Boolean> isCollected(@PathVariable Long blogId) {
+        boolean isCollected = this.blogService.isCollected(blogId);
+        return ResponseEntity.ok(isCollected);
+    }
 }
 

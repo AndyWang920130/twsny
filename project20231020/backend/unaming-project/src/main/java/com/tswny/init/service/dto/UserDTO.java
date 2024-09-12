@@ -18,19 +18,23 @@ public class UserDTO extends AbstractAuditingEntityDTO{
 
     private Instant birthday;
 
-    public UserDTO(User user) {
-        this.id = user.getId();
-        this.login = user.getLogin();
-        this.password = user.getPassword();
-        this.phone = user.getPhone();
-        this.realName = user.getRealName();
-        this.birthday = user.getBirthday();
+    private String profile;
 
-        this.createdBy = user.getCreatedBy();
-        this.createdDate = user.getCreatedDate();
-        this.lastModifiedBy = user.getLastModifiedBy();
-        this.lastModifiedDate = user.getLastModifiedDate();
-    }
+
+
+//    public UserDTO(User user) {
+//        this.id = user.getId();
+//        this.login = user.getLogin();
+//        this.password = user.getPassword();
+//        this.phone = user.getPhone();
+//        this.realName = user.getRealName();
+//        this.birthday = user.getBirthday();
+//
+//        this.createdBy = user.getCreatedBy();
+//        this.createdDate = user.getCreatedDate();
+//        this.lastModifiedBy = user.getLastModifiedBy();
+//        this.lastModifiedDate = user.getLastModifiedDate();
+//    }
 
     public Long getId() {
         return id;
@@ -78,5 +82,13 @@ public class UserDTO extends AbstractAuditingEntityDTO{
 
     public void setBirthday(Instant birthday) {
         this.birthday = birthday;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 }

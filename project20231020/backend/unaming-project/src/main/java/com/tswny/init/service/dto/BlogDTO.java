@@ -26,6 +26,10 @@ public class BlogDTO {
 
     private Instant publishDate;
 
+    private List<UserDTO> usersCollected;
+
+    private List<UserDTO> usersLiked;
+
     public Long getId() {
         return id;
     }
@@ -104,5 +108,21 @@ public class BlogDTO {
 
     public void setPublishDate(Instant publishDate) {
         this.publishDate = publishDate;
+    }
+
+    public List<UserDTO> getUsersCollected() {
+        return usersCollected;
+    }
+
+    public void setUsersCollected(List<UserDTO> usersCollected) {
+        this.usersCollected = usersCollected;
+    }
+
+    public List<UserDTO> getUsersLiked() {
+        return usersLiked;
+    }
+
+    public void setUsersLiked(List<UserDTO> usersLiked) {
+        this.usersLiked = usersLiked;
     }
 }

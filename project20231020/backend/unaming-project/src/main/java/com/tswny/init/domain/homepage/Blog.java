@@ -6,6 +6,8 @@ import com.tswny.init.domain.User;
 import com.tswny.init.domain.enumeration.BlogOpenStateEnum;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Blog extends AbstractAuditingEntity {
@@ -28,6 +30,24 @@ public class Blog extends AbstractAuditingEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @JsonIgnoreProperties(value = "blogsCollected", allowSetters = true)
+    @ManyToMany
+    @JoinTable(
+            name = "blog_users_collected",
+            joinColumns = @JoinColumn(name = "blog_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_collected_id")
+    )
+    private Set<User> usersCollected = new HashSet<>();
+
+    @JsonIgnoreProperties(value = "blogsLiked", allowSetters = true)
+    @ManyToMany
+    @JoinTable(
+            name = "blog_users_liked",
+            joinColumns = @JoinColumn(name = "blog_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_liked_id")
+    )
+    private Set<User> usersLiked = new HashSet<>();
 
     public void setId(Long id) {
         this.id = id;
@@ -91,5 +111,21 @@ public class Blog extends AbstractAuditingEntity {
 
     public void setOpenState(BlogOpenStateEnum openState) {
         this.openState = openState;
+    }
+
+    public Set<User> getUsersCollected() {
+        return usersCollected;
+    }
+
+    public void setUsersCollected(Set<User> usersCollected) {
+        this.usersCollected = usersCollected;
+    }
+
+    public Set<User> getUsersLiked() {
+        return usersLiked;
+    }
+
+    public void setUsersLiked(Set<User> usersLiked) {
+        this.usersLiked = usersLiked;
     }
 }
