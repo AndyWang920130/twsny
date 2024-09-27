@@ -1,6 +1,8 @@
 package com.tswny.init.service;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.tswny.init.domain.QUser;
 import com.tswny.init.domain.User;
 import com.tswny.init.domain.enumeration.BlogCollectStateEnum;
 import com.tswny.init.domain.enumeration.BlogLikeStateEnum;
@@ -20,11 +22,13 @@ import com.tswny.init.web.rest.vm.BlogLikeVM;
 import com.tswny.init.web.rest.vm.BlogVM;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -40,12 +44,15 @@ public class BlogService {
     private final UserRepository userRepository;
     private final BlogMapper blogMapper;
     private final UserHelper userHelper;
+    private final JPAQueryFactory jpaQueryFactory;
 
-    public BlogService(BlogRepository blogRepository, UserRepository userRepository, BlogMapper blogMapper, UserHelper userHelper) {
+
+    public BlogService(BlogRepository blogRepository, UserRepository userRepository, BlogMapper blogMapper, UserHelper userHelper, JPAQueryFactory jpaQueryFactory) {
         this.blogRepository = blogRepository;
         this.userRepository = userRepository;
         this.blogMapper = blogMapper;
         this.userHelper = userHelper;
+        this.jpaQueryFactory = jpaQueryFactory;
     }
 
     /**
@@ -85,7 +92,47 @@ public class BlogService {
             booleanBuilder.andAnyOf(qBlog.remark.like("%" + keyword + "%" )
                     .or(qBlog.tag.like("%" + keyword + "%" )));
         }
-        return this.blogRepository.findAll(booleanBuilder, pageable).map(blogMapper::toDto);
+
+        Sort.Order order1 = new Sort.Order(Sort.Direction.DESC, "createdDate");
+        Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "title");
+        Sort sort = Sort.by(order1, order2);
+
+        List<Blog> blogList1 = jpaQueryFactory
+                .selectFrom(qBlog)
+                .where(booleanBuilder)
+                .orderBy(qBlog.createdBy.desc(), qBlog.title.asc())
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        List<Blog> blogList2 = jpaQueryFactory
+                .selectFrom(qBlog)
+                .where(booleanBuilder)
+                .orderBy(qBlog.id.multiply(0.3)
+                        .add(qBlog.user.id.multiply(0.7))
+                        .desc())
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        QUser qUser = QBlog.blog.user;
+        List<Blog> blogList3 =jpaQueryFactory
+                .selectFrom(qBlog)
+                .where(booleanBuilder)
+                .leftJoin(qBlog.usersLiked)
+                .groupBy(qBlog.id)
+                .orderBy(qUser.count().desc())
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+
+        Pageable recommendPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        return this.blogRepository.findAll(booleanBuilder, recommendPageable).map(blogMapper::toDto);
     }
 
 

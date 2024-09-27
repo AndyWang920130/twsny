@@ -3,6 +3,7 @@ package com.tswny.init.web.rest;
 import com.tswny.init.domain.enumeration.BlogOpenStateEnum;
 import com.tswny.init.service.BlogService;
 import com.tswny.init.service.dto.BlogDTO;
+import com.tswny.init.util.PaginationUtil;
 import com.tswny.init.web.rest.vm.BlogCollectVM;
 import com.tswny.init.web.rest.vm.BlogLikeVM;
 import com.tswny.init.web.rest.vm.BlogVM;
@@ -10,8 +11,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -40,7 +43,9 @@ public class BlogResource {
     public ResponseEntity<Page<BlogDTO>> queryByPage(@RequestParam(required = false) String category,
                                                      @RequestParam(required = false) String keyword,
                                                      @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok(this.blogService.queryBlogsByPage(null, category, keyword, BlogOpenStateEnum.PUBLIC, pageable));
+        Page<BlogDTO> blogDTOPage = this.blogService.queryBlogsByPage(null, category, keyword, BlogOpenStateEnum.PUBLIC, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), blogDTOPage);
+        return ResponseEntity.ok().headers(headers).body(blogDTOPage);
     }
 
     @GetMapping("public")
@@ -48,7 +53,9 @@ public class BlogResource {
                                                                 @RequestParam(required = false) String userName,
                                                                 @RequestParam(required = false) String keyword,
                                                                 @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok(this.blogService.queryBlogsByPage(userName, category, keyword, BlogOpenStateEnum.PUBLIC, pageable));
+        Page<BlogDTO> blogDTOPage = this.blogService.queryBlogsByPage(userName, category, keyword, BlogOpenStateEnum.PUBLIC, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), blogDTOPage);
+        return ResponseEntity.ok().headers(headers).body(blogDTOPage);
     }
 
     /**
@@ -61,7 +68,9 @@ public class BlogResource {
                                                               @RequestParam(required = false) BlogOpenStateEnum openState,
                                                               @RequestParam(required = false) String keyword,
                                                               @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok(this.blogService.queryUserBlogsByPage(category, openState, keyword, pageable));
+        Page<BlogDTO> blogDTOPage = this.blogService.queryUserBlogsByPage(category, openState, keyword, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), blogDTOPage);
+        return ResponseEntity.ok().headers(headers).body(blogDTOPage);
     }
 
     /**
