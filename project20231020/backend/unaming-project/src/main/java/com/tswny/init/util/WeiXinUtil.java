@@ -32,7 +32,7 @@ public class WeiXinUtil {
 
     private static Map<String, String> appIdAndAppSecretMap = new HashMap<>();
     static {
-        appIdAndAppSecretMap.put("wx7d6557dc20346281", "5743cd7a6a406fad8bd61cd60dac2537");
+        appIdAndAppSecretMap.put("wx7d6557dc20346281", "5743cd7a6a406fad8bd61cd60dac2537"); // twsny
         appIdAndAppSecretMap.put("wxb8efee18f1790b70", "27dfb86a9c6a7f928a3f502a03e57919"); //AED
     }
 
