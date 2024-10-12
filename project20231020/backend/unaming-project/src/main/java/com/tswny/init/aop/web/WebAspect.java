@@ -34,7 +34,7 @@ public class WebAspect {
     }
 
     /**
-     * PostMapping,PutMapping切点
+     * PostMapping,PutMapping的切点
      */
     @Pointcut("within(@org.springframework.web.bind.annotation.PostMapping *)" +
             " || within(@org.springframework.web.bind.annotation.PutMapping *)")
