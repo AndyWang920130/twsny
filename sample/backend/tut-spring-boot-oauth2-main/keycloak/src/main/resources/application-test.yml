@@ -1,0 +1,31 @@
+logging:
+  level:
+    org.springframework.security: DEBUG
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: testClient20250803
+            client-secret: 0Xj95G0tw4WodNQDLjX07GaksA4euOqm
+            scope: openid,profile,email
+            provider: keycloak
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: authorization_code
+        provider:
+          keycloak:
+            # 新版本不兼容采用下面的方式
+            issuer-uri: https://demo.jousing.cn:8090/realms/testRealm20250803
+#            authorization-uri: https://demo.jousing.cn:8090/realms/testRealm20250803/protocol/openid-connect/auth
+#            token-uri: https://demo.jousing.cn:8090/realms/testRealm20250803/protocol/openid-connect/token
+#            user-info-uri: https://demo.jousing.cn:8090/realms/testRealm20250803/protocol/openid-connect/userinfo
+#            jwk-set-uri: https://demo.jousing.cn:8090/realms/testRealm20250803/protocol/openid-connect/certs
+#            user-name-attribute: preferred_username
+server:
+  port: 8080
+  #  forward-headers-strategy: native
+twsny:
+  login:
+    callback:
+      path: http://localhost:5173/loginback
