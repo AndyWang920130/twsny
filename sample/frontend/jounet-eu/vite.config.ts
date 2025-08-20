@@ -17,4 +17,12 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  // server: {
+  //   proxy: {
+  //     "/oauth2": {
+  //       target: "http://localhost:8081",
+  //       changeOrigin: true,
+  //     }
+  //   }
+  // }
 })

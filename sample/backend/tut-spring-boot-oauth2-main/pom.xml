@@ -9,12 +9,9 @@
 	<name>Spring Security OAuth2 Samples</name>
 
 	<modules>
-		<module>simple</module>
-		<module>click</module>
-		<module>logout</module>
-		<module>two-providers</module>
-		<module>custom-error</module>
-		<module>keycloak</module>
+		<module>oauth-server/twsny-auth-server</module>
+		<module>oauth-client/keycloak-auth-client</module>
+		<module>oauth-client/twsny-auth-client</module>
 	</modules>
 	
     <build>

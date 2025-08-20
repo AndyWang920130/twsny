@@ -1,0 +1,32 @@
+logging:
+  level:
+    org.springframework.security: DEBUG
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+#          github:
+#            client-id: Ov23liWRkr7Gz4MRhmEV
+#            client-secret: 6e2da9ace4c553493946fe160980d7a1b26a0ab3
+#          google:
+#            client-id: 999109956096-57lq5gkpltp8saktd2lad3im0r0uknbr.apps.googleusercontent.com
+#            client-secret: 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
+          keycloak:
+            client-id: testClient20250803
+            client-secret: oG9yhtD5qnxLNTF6tT4BOog0tf79EIBa
+            scope: openid,profile,email
+            provider: keycloak
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: authorization_code
+        provider:
+          keycloak:
+            # 新版本不兼容采用下面的方式
+            issuer-uri: https://demo.jousing.cn:8090/realms/testRealm20250803
+server:
+  port: 8080
+  #  forward-headers-strategy: native
+twsny:
+  login:
+    callback:
+      path: http://localhost:5173/loginback
