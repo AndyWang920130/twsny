@@ -6,21 +6,36 @@ spring:
     oauth2:
       client:
         registration:
-          twsny:
+          twsny-auth:
             client-id: twsny-client
             client-secret: 123456
             scope: openid,profile,email
-            provider: twsny
+            provider: twsny-auth
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: authorization_code
+          keycloak-auth:
+            client-id: twsny-stardardclient
+            client-secret: sdzJsaOs4vvJHHJVYvRhGJO5urd4QTlq
+            scope: openid,profile,email
+            provider: keycloak-auth
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: authorization_code
+          keycloak-github-auth:
+            client-id: twsny-githubclient
+            client-secret: MxwKypFVbrOuepXk5msyiFU3caHUjrTq
+            scope: openid,profile,email
+            provider: keycloak-github-auth
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             authorization-grant-type: authorization_code
         provider:
-          twsny:
+          twsny-auth:
             issuer-uri: http://127.0.0.1:9000
-#            authorization-uri: http://localhost:9000/oauth2/authorize
-#            token-uri: http://localhost:9000/oauth2/token
-#            user-info-uri: http://localhost:9000/userinfo
-#            jwk-set-uri: http://localhost:9000/oauth2/jwks
-#            user-name-attribute: sub
+          keycloak-auth:
+            issuer-uri: https://demo.jousing.cn:8090/realms/twsny-stardardrealm
+          keycloak-github-auth:
+            issuer-uri: https://demo.jousing.cn:8090/realms/twsny-githubrealm
+#          keycloak-custom-auth:
+#            issuer-uri: https://demo.jousing.cn:8090/realms/twsny-customrealm
 
 server:
   port: 8081

@@ -133,7 +133,7 @@ public class SpringSecurityConfiguration {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://localhost:8081/login/oauth2/code/twsny")
+                .redirectUri("http://localhost:8081/login/oauth2/code/twsny-auth")
                 .postLogoutRedirectUri("http://localhost:8081/")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
@@ -141,6 +141,21 @@ public class SpringSecurityConfiguration {
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
 
+//        RegisteredClient keycloakOidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
+//                .clientId("twsny-keycloak-client")
+//                .clientSecret("{noop}12345678")
+//                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+//                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+//                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+//                .redirectUri("https://demo.jousing.cn:8090/realms/twsny-customrealm/broker/custom-oidc/endpoint")
+//                .postLogoutRedirectUri("http://localhost:8081/")
+//                .scope(OidcScopes.OPENID)
+//                .scope(OidcScopes.PROFILE)
+//                .scope(OidcScopes.EMAIL)
+//                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+//                .build();
+//
+//        return new InMemoryRegisteredClientRepository(oidcClient, keycloakOidcClient);
         return new InMemoryRegisteredClientRepository(oidcClient);
     }
 

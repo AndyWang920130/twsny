@@ -2,20 +2,23 @@ package com.example.configuration;
 
 import com.example.security.CustomAuthenticationFailureHandler;
 import com.example.security.CustomAuthenticationSuccessHandler;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
+@EnableWebSecurity
 @Configuration
-public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+public class SpringSecurityConfiguration {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // @formatter:off
         http
-                .authorizeRequests(a -> a
-                        .antMatchers("/", "/login/**", "/public/**",  "/error", "/webjars/**", "/login/oauth2/**").permitAll()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/login/**", "/public/**",  "/error", "/webjars/**", "/login/oauth2/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(e -> e
@@ -25,6 +28,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .failureHandler(new CustomAuthenticationFailureHandler())
                         .successHandler(new CustomAuthenticationSuccessHandler())
                 );
-        // @formatter:on
+        return http.build();
     }
 }

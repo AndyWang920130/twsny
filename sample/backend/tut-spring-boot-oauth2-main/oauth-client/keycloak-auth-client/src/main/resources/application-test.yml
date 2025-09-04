@@ -12,17 +12,16 @@ spring:
 #          google:
 #            client-id: 999109956096-57lq5gkpltp8saktd2lad3im0r0uknbr.apps.googleusercontent.com
 #            client-secret: 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
-          keycloak:
-            client-id: testClient20250803
-            client-secret: oG9yhtD5qnxLNTF6tT4BOog0tf79EIBa
+          keycloak-auth:
+            client-id: twsny-stardardclient
+            client-secret: sdzJsaOs4vvJHHJVYvRhGJO5urd4QTlq
             scope: openid,profile,email
-            provider: keycloak
+            provider: keycloak-auth
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             authorization-grant-type: authorization_code
         provider:
-          keycloak:
-            # 新版本不兼容采用下面的方式
-            issuer-uri: https://demo.jousing.cn:8090/realms/testRealm20250803
+          keycloak-auth:
+            issuer-uri: https://demo.jousing.cn:8090/realms/twsny-stardardrealm
 server:
   port: 8080
   #  forward-headers-strategy: native

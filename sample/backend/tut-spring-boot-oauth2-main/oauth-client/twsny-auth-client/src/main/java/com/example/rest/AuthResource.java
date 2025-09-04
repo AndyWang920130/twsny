@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,12 +29,19 @@ public class AuthResource {
 
     @GetMapping("/oauth2/authenticate/callback")
     public ResponseEntity<String> user(@AuthenticationPrincipal OAuth2User oauthUser,
+                                       @AuthenticationPrincipal OidcUser oidcUser,
                                        HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String clientUsername = oauthUser.getAttribute("preferred_username");
-        String username = oauthUser.getAttribute("name");
-        String email = oauthUser.getAttribute("email");
+//        String clientUsername = oauthUser.getAttribute("preferred_username");
+//        String username = oauthUser.getAttribute("name");
+//        String email = oauthUser.getAttribute("email");
+        String name = oidcUser.getName();
+        String username = oidcUser.getPreferredUsername();
+        String fullName  = oidcUser.getFullName();
+        String email = oidcUser.getEmail();
+        String phoneNumber =  oidcUser.getPhoneNumber();
+        System.out.println(name + ", " + username + ", " + fullName + ", " + email + ", " + phoneNumber);
 
-        String token = username;
+        String token = name;
         response.sendRedirect(twsnyLoginCallbackPath + "?token=" + token);
         return ResponseEntity.ok(token);
     }
