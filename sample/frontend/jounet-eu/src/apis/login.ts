@@ -10,10 +10,14 @@ export function authenticate(loginVm : LoginFormT) {
     return false;
 }
 
-export function loginWithKeycloak() {
-  window.location.href = "http://localhost:8080/oauth2/authorization/keycloak";
+export function loginWithKeycloak_github() {
+  window.location.href = "http://localhost:8081/oauth2/authorization/keycloak-github-auth";
 }
 
-export function loginWithTwsnyOdc() {
-  window.location.href = "http://localhost:8081/oauth2/authorization/twsny";
+export function loginWithKeycloak() {
+  window.location.href = "http://localhost:8081/oauth2/authorization/keycloak-auth";
+}
+
+export function authTwsny() {
+  window.location.href = "http://localhost:8081/oauth2/authorization/twsny-auth";
 }

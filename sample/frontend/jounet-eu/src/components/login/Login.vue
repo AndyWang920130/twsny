@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import { Dropdown, Button, Menu, MenuItem, Alert } from 'ant-design-vue';
 import { setWithExpiry, updateLoginStatus } from '@/apis/localStorager'
 import { LoginConfig } from '@/types/CommonD'
-import { authenticate, loginWithKeycloak, loginWithTwsnyOdc } from '@/apis/login';
+import { authenticate, authTwsny, loginWithKeycloak, loginWithKeycloak_github} from '@/apis/login';
 import type { LoginFormT } from '@/apis/UserD';
 
   const username = ref('')
@@ -34,15 +34,20 @@ import type { LoginFormT } from '@/apis/UserD';
     }
   }
 
+  const thirdLogin_keyCloak_github = () => {
+    console.log('thirdLogin_keyCloak_github')
+    loginWithKeycloak_github()
+  }
+
 
   const thirdLogin_keyCloak = () => {
     console.log('thirdLogin_keyCloak')
     loginWithKeycloak()
   }
 
-    const twsny_odc = () => {
-    console.log('twsny_odc')
-    loginWithTwsnyOdc()
+    const auth_twsny = () => {
+    console.log('auth_twsny')
+    authTwsny()
   }
 
 </script>
@@ -82,17 +87,22 @@ import type { LoginFormT } from '@/apis/UserD';
                       KEY CLOAK
                 </a>
               </MenuItem>
-              <MenuItem key="2">
-                <a href="javascript:void(0)" @click="twsny_odc">
-                      TWSNY ODC
+               <MenuItem key="2">
+                <a href="javascript:void(0)" @click="thirdLogin_keyCloak_github">
+                      KEY CLOAK OIDC GITHUB
                 </a>
               </MenuItem>
               <MenuItem key="3">
+                <a href="javascript:void(0)" @click="auth_twsny">
+                      TWSNY AUTH SERVER
+                </a>
+              </MenuItem>
+              <MenuItem key="4">
                 <a href="javascript:void(0)" @click="console.log('WE CHAT')">
                       WE CHAT
                 </a>
               </MenuItem>
-              <MenuItem key="4">
+              <MenuItem key="5">
                 <a href="javascript:void(0)" @click="console.log('ALI PAY')">
                       ALI PAY
                 </a>
