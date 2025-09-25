@@ -31,15 +31,15 @@ public class AuthResource {
     public ResponseEntity<String> user(@AuthenticationPrincipal OAuth2User oauthUser,
                                        @AuthenticationPrincipal OidcUser oidcUser,
                                        HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        String clientUsername = oauthUser.getAttribute("preferred_username");
-//        String username = oauthUser.getAttribute("name");
-//        String email = oauthUser.getAttribute("email");
-        String name = oidcUser.getName();
-        String username = oidcUser.getPreferredUsername();
-        String fullName  = oidcUser.getFullName();
-        String email = oidcUser.getEmail();
-        String phoneNumber =  oidcUser.getPhoneNumber();
-        System.out.println(name + ", " + username + ", " + fullName + ", " + email + ", " + phoneNumber);
+        String clientUsername = oauthUser.getAttribute("preferred_username");
+        String name = oauthUser.getAttribute("name");
+        String email = oauthUser.getAttribute("email");
+//        String name = oidcUser.getName();
+//        String username = oidcUser.getPreferredUsername();
+//        String fullName  = oidcUser.getFullName();
+//        String email = oidcUser.getEmail();
+//        String phoneNumber =  oidcUser.getPhoneNumber();
+//        System.out.println(name + ", " + username + ", " + fullName + ", " + email + ", " + phoneNumber);
 
         String token = name;
         response.sendRedirect(twsnyLoginCallbackPath + "?token=" + token);

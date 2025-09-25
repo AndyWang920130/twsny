@@ -4,7 +4,7 @@
     import type { Key } from 'ant-design-vue/es/_util/type';
     import router from '@/router';
     import { useRoute } from 'vue-router';
-    import { getWithExpiry } from '@/apis/localStorager';
+    import { getWithExpiry } from '@/apis/utils/localStorager';
     import { LoginConfig } from '@/types/CommonD';
     import MenuUserInfo from './MenuUserInfo.vue';
     import type { UserInfoT } from '@/apis/UserD';

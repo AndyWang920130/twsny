@@ -1,6 +1,8 @@
 package com.example.configuration;
 
 import com.example.filter.RemoveDpopFilter;
+import com.example.security.CustomAuthenticationFailureHandler;
+import com.example.security.CustomAuthenticationSuccessHandler;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -17,6 +19,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -37,6 +40,7 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -54,17 +58,6 @@ import java.util.function.Consumer;
 @EnableWebSecurity
 @Configuration
 public class SpringSecurityConfiguration {
-
-//    @Bean
-//    @Order(1)
-//    public SecurityFilterChain authorizationServerSecurityPreFilterChain(HttpSecurity http)
-//            throws Exception {
-//
-//        // 把 RemoveDpopFilter 放在 UsernamePasswordAuthenticationFilter 之前
-//        http.addFilterBefore(new RemoveDpopFilter(), UsernamePasswordAuthenticationFilter.class);
-//
-//        return http.build();
-//    }
 
     @Bean
     @Order(1)
@@ -105,29 +98,44 @@ public class SpringSecurityConfiguration {
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
             throws Exception {
         http
+                .cors(Customizer.withDefaults())
+//                .csrf(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable) //
                 .authorizeHttpRequests((authorize) -> authorize
+//                        .requestMatchers("/login").permitAll()
                         .anyRequest().authenticated())
                 // Form login handles the redirect to the login page from the
                 // authorization server filter chain
-                .formLogin(Customizer.withDefaults());
+//                 .formLogin(Customizer.withDefaults())
+                 .formLogin(form -> form
+//                 .loginPage("/none") // 指定一个不存在的页面
+//                 .loginProcessingUrl("/login") // POST /login 仍然可以认证
+                 .successHandler(new CustomAuthenticationSuccessHandler())
+                 .failureHandler(new CustomAuthenticationFailureHandler()));
+                 // .permitAll()); // 允许匿名访问 POST /login
 
         return http.build();
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails userDetails = User.withDefaultPasswordEncoder()
-                .username("user")
+        UserDetails userDetails1 = User.withDefaultPasswordEncoder()
+                .username("user1")
+                .password("password")
+                .roles("USER")
+                .build();
+        UserDetails userDetails2 = User.withDefaultPasswordEncoder()
+                .username("user2")
                 .password("password")
                 .roles("USER")
                 .build();
 
-        return new InMemoryUserDetailsManager(userDetails);
+        return new InMemoryUserDetailsManager(userDetails1, userDetails2);
     }
 
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
-        RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
+        RegisteredClient authorizationCodeTwsnyClient1 = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("twsny-client")
                 .clientSecret("{noop}123456")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
@@ -140,23 +148,29 @@ public class SpringSecurityConfiguration {
                 .scope(OidcScopes.EMAIL)
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
+        RegisteredClient authorizationCodeTwsnyClient2 = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("twsny-client2")
+                .clientSecret("{noop}12345678")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .redirectUri("http://localhost:8081/login/oauth2/code/twsny-auth2")
+                .postLogoutRedirectUri("http://localhost:8081/")
+                .scope(OidcScopes.OPENID)
+                .scope(OidcScopes.PROFILE)
+                .scope(OidcScopes.EMAIL)
+                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+                .build();
+        RegisteredClient clientCredentialsTwsnyClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("twsny-credentials-client")
+                .clientSecret("{noop}123456789")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS) // 客户端模式
+                .scope("device.read")
+                .scope("device.write")
+                .build();
 
-//        RegisteredClient keycloakOidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
-//                .clientId("twsny-keycloak-client")
-//                .clientSecret("{noop}12345678")
-//                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-//                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-//                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-//                .redirectUri("https://demo.jousing.cn:8090/realms/twsny-customrealm/broker/custom-oidc/endpoint")
-//                .postLogoutRedirectUri("http://localhost:8081/")
-//                .scope(OidcScopes.OPENID)
-//                .scope(OidcScopes.PROFILE)
-//                .scope(OidcScopes.EMAIL)
-//                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
-//                .build();
-//
-//        return new InMemoryRegisteredClientRepository(oidcClient, keycloakOidcClient);
-        return new InMemoryRegisteredClientRepository(oidcClient);
+        return new InMemoryRegisteredClientRepository(authorizationCodeTwsnyClient1, authorizationCodeTwsnyClient2, clientCredentialsTwsnyClient);
     }
 
     @Bean
@@ -214,4 +228,5 @@ public class SpringSecurityConfiguration {
                     provider.getClass().getName().contains("DPoP"));
         };
     }
+
 }

@@ -5,7 +5,7 @@ import HelloWorld from '@/components/HelloWorld.vue'
 import UserProfile from '@/components/user/UserProfile.vue'
 import ChangePassword from '@/components/user/ChangePassword.vue'
 
-import { getWithExpiry } from '@/apis/localStorager'
+import { getWithExpiry } from '@/apis/utils/localStorager'
 import { LoginConfig } from '@/types/CommonD'
 import UserSetting from '@/components/user/UserSetting.vue'
 import LoginBack from '@/components/login/LoginBack.vue'

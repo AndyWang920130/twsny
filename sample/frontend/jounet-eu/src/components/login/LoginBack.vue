@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { setWithExpiry, updateLoginStatus } from '@/apis/localStorager';
+import { setWithExpiry, updateLoginStatus } from '@/apis/utils/localStorager';
 import { LoginConfig } from '@/types/CommonD';
 import router from '@/router';
 console.log("111111")

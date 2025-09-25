@@ -15,14 +15,19 @@
  */
 package com.example;
 
+import com.example.security.CustomOAuth2AuthorizedManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 public class TwsnyClientApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TwsnyClientApplication.class, args);
+
+		ConfigurableApplicationContext context =  SpringApplication.run(TwsnyClientApplication.class, args);
+		CustomOAuth2AuthorizedManager customOAuth2AuthorizedManager = context.getBean(CustomOAuth2AuthorizedManager.class);
+		customOAuth2AuthorizedManager.callDeviceApi();
 	}
 
 }

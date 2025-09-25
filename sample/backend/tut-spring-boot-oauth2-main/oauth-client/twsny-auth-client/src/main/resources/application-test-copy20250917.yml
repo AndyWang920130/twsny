@@ -13,28 +13,33 @@ spring:
             provider: twsny-auth
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             authorization-grant-type: authorization_code
-          twsny-auth2:
-            client-id: twsny-client2
-            client-secret: 12345678
-            scope: openid,profile,email
-            provider: twsny-auth2
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-            authorization-grant-type: authorization_code
-          twsny-auth3:
-            client-id: twsny-credentials-client
-            client-secret: 123456789
-            authorization-grant-type: client_credentials
-            scope: device.read,device.write
           github:
             client-id: Ov23liFp0o0hftUcmUbg
             client-secret: a61f3cdda86183f0ec6f144c9f7ac7db3efabb0f
+#          keycloak-auth:
+#            client-id: twsny-stardardclient
+#            client-secret: sdzJsaOs4vvJHHJVYvRhGJO5urd4QTlq
+#            scope: openid,profile,email
+#            provider: keycloak-auth
+#            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+#            authorization-grant-type: authorization_code
+#          keycloak-github-auth:
+#            client-id: twsny-githubclient
+#            client-secret: MxwKypFVbrOuepXk5msyiFU3caHUjrTq
+#            scope: openid,profile,email
+#            provider: keycloak-github-auth
+#            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+#            authorization-grant-type: authorization_code
         provider:
           twsny-auth:
             issuer-uri: http://127.0.0.1:9000
-          twsny-auth2:
-            issuer-uri: http://127.0.0.1:9000
-          twsny-auth3:
-            token-uri: http://localhost:9000/oauth2/token
+#          keycloak-auth:
+#            issuer-uri: https://demo.jousing.cn:8090/realms/twsny-stardardrealm
+#          keycloak-github-auth:
+#            issuer-uri: https://demo.jousing.cn:8090/realms/twsny-githubrealm
+#          keycloak-custom-auth:
+#            issuer-uri: https://demo.jousing.cn:8090/realms/twsny-customrealm
+
 server:
   port: 8081
   servlet:

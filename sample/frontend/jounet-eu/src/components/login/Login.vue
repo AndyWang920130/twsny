@@ -2,9 +2,9 @@
 import router from '@/router'
 import { ref } from 'vue'
 import { Dropdown, Button, Menu, MenuItem, Alert } from 'ant-design-vue';
-import { setWithExpiry, updateLoginStatus } from '@/apis/localStorager'
+import { setWithExpiry, updateLoginStatus } from '@/apis/utils/localStorager'
 import { LoginConfig } from '@/types/CommonD'
-import { authenticate, authTwsny, loginWithKeycloak, loginWithKeycloak_github} from '@/apis/login';
+import { authenticate,  authTwsny, loginWithKeycloak, loginWithKeycloak_github, oidcGithub, authTwsny2} from '@/apis/login';
 import type { LoginFormT } from '@/apis/UserD';
 
   const username = ref('')
@@ -23,15 +23,19 @@ import type { LoginFormT } from '@/apis/UserD';
       "password" : password.value
     })
 
-
-    if (authenticate(loginVM.value)) {
-        setWithExpiry(LoginConfig.localStorageKey, loginVM.value.username, 60 * 60 * 1000)
-        updateLoginStatus()
-        // 可以跳转到主页，如：
-        router.push('/home')
-    } else {
-        errorMessage.value = '用户名或密码错误'
-    }
+    authenticate(loginVM.value)
+    .then(res => {
+        if (res) {
+          console.log("succcess")
+          setWithExpiry(LoginConfig.localStorageKey, loginVM.value.username, 60 * 60 * 1000)
+          updateLoginStatus()
+          // 可以跳转到主页，如：
+          router.push('/home')
+        } else {
+            console.log("failure")
+            errorMessage.value = '用户名或密码错误'
+        } 
+    })
   }
 
   const thirdLogin_keyCloak_github = () => {
@@ -45,10 +49,22 @@ import type { LoginFormT } from '@/apis/UserD';
     loginWithKeycloak()
   }
 
-    const auth_twsny = () => {
+  const auth_twsny = () => {
     console.log('auth_twsny')
     authTwsny()
   }
+
+  const auth_twsn2 = () => {
+    console.log('auth_twsn2')
+    authTwsny2()
+  }
+
+  const oidc_github = () => {
+    console.log('oidc_github')
+    oidcGithub()
+  }
+
+
 
 </script>
 <template>
@@ -83,28 +99,18 @@ import type { LoginFormT } from '@/apis/UserD';
           <template #overlay>
             <Menu>
               <MenuItem key="1">
-                <a href="javascript:void(0)" @click="thirdLogin_keyCloak">
-                      KEY CLOAK
-                </a>
-              </MenuItem>
-               <MenuItem key="2">
-                <a href="javascript:void(0)" @click="thirdLogin_keyCloak_github">
-                      KEY CLOAK OIDC GITHUB
-                </a>
-              </MenuItem>
-              <MenuItem key="3">
                 <a href="javascript:void(0)" @click="auth_twsny">
                       TWSNY AUTH SERVER
                 </a>
               </MenuItem>
-              <MenuItem key="4">
-                <a href="javascript:void(0)" @click="console.log('WE CHAT')">
-                      WE CHAT
+              <MenuItem key="2">
+                <a href="javascript:void(0)" @click="auth_twsn2">
+                      TWSNY AUTH SERVER2
                 </a>
               </MenuItem>
-              <MenuItem key="5">
-                <a href="javascript:void(0)" @click="console.log('ALI PAY')">
-                      ALI PAY
+              <MenuItem key="3">
+                <a href="javascript:void(0)" @click="oidc_github">
+                      GIT HUB OIDC
                 </a>
               </MenuItem>
             </Menu>

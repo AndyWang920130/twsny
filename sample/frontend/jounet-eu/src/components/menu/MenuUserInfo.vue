@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { UserInfoT } from '@/apis/UserD';
 import { Dropdown, Button, Menu, MenuItem, Space, Avatar} from 'ant-design-vue';
-import { getWithExpiry, isLoggedIn, loginToken, remove, updateLoginStatus } from '@/apis/localStorager';
+import { getWithExpiry, isLoggedIn, loginToken, remove, updateLoginStatus } from '@/apis/utils/localStorager';
 import { LoginConfig } from '@/types/CommonD';
 import { ref } from 'vue';
 import router from '@/router';
