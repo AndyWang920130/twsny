@@ -7,7 +7,7 @@ export function authenticate(loginVm : LoginFormT) : Promise<boolean> {
     const password = loginVm.password
 
     // 模拟登录逻辑
-    // if (username === 'admin' && password === '123456') return true;
+    if (username === 'admin' && password === '123456') return Promise.resolve(true);
     return api.postForm("http://localhost:9000/login", {}, loginVm)
     .then(res =>  true)
     .catch(err => false)

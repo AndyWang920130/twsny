@@ -9,6 +9,9 @@ import { getWithExpiry } from '@/apis/utils/localStorager'
 import { LoginConfig } from '@/types/CommonD'
 import UserSetting from '@/components/user/UserSetting.vue'
 import LoginBack from '@/components/login/LoginBack.vue'
+import UserList from '@/components/user/UserList.vue'
+import UserForm from '@/components/user/UserForm.vue'
+import UserDetail from '@/components/user/UserDetail.vue'
 
 const customRoutes = [
      {
@@ -54,6 +57,26 @@ const customRoutes = [
       path: '/user/userSetting',
       name: 'userSetting',
       component: UserSetting,
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: UserList,
+    },
+    {
+      path: '/user/create',
+      name: 'userCreate',
+      component: UserForm,
+    },
+    {
+      path: '/user/:id',
+      name: 'userDetail',
+      component: UserDetail,
+    },
+    {
+      path: '/user/:id/edit',
+      name: 'userEdit',
+      component: UserForm,
     },
   ]
 const router = createRouter({

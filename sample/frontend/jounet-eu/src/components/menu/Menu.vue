@@ -47,6 +47,7 @@
             @click="handleClick"
           >
             <MenuItem key="/home">HOME</MenuItem>
+            <MenuItem key="/user">USER</MenuItem>
             <MenuItem key="/about">ABOUT</MenuItem>
             <!-- <MenuItem key="/login">LOGIN</MenuItem> -->
           </Menu>

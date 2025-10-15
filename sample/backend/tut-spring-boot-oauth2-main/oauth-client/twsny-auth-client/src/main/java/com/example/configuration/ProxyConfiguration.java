@@ -10,9 +10,9 @@ public class ProxyConfiguration {
     @PostConstruct
     public void initProxy() {
         System.setProperty("http.proxyHost", "127.0.0.1");
-        System.setProperty("http.proxyPort", "4780");
+        System.setProperty("http.proxyPort", "7897");
         System.setProperty("https.proxyHost", "127.0.0.1");
-        System.setProperty("https.proxyPort", "4780");
-        System.out.println("Dev environment: proxy initialized on 127.0.0.1:4780");
+        System.setProperty("https.proxyPort", "7897");
+        System.out.println("Dev environment: proxy initialized on 127.0.0.1:7897");
     }
 }
