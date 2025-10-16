@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
+@RequestMapping("")
 public class FallBackResource {
     @RequestMapping("/fallback")
     public Mono<String> fallback() {
