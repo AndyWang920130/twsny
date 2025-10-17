@@ -1,6 +1,7 @@
 logging:
   level:
     io.github.resilience4j.circuitbreaker: DEBUG
+    org.springframework.security.web.server.authorization: DEBUG
 
 server:
   port: 8085
