@@ -12,6 +12,8 @@ import LoginBack from '@/components/login/LoginBack.vue'
 import UserList from '@/components/user/UserList.vue'
 import UserForm from '@/components/user/UserForm.vue'
 import UserDetail from '@/components/user/UserDetail.vue'
+import ItemsList from '@/components/item/ItemsList.vue'
+import ItemDetail from '@/components/item/ItemDetail.vue'
 
 const customRoutes = [
      {
@@ -77,6 +79,16 @@ const customRoutes = [
       path: '/user/:id/edit',
       name: 'userEdit',
       component: UserForm,
+    },
+    {
+      path: '/item',
+      name: 'item',
+      component: ItemsList,
+    },
+    {
+      path: '/item/:id',
+      name: 'itemDetail',
+      component: ItemDetail,
     },
   ]
 const router = createRouter({
