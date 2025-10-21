@@ -1,0 +1,13 @@
+logging:
+  level:
+    org.springframework.security: TRACE
+#spring:
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          github:
+#            client-id: Ov23liFp0o0hftUcmUbg
+#            client-secret: a61f3cdda86183f0ec6f144c9f7ac7db3efabb0f
+server:
+  port: 9000
