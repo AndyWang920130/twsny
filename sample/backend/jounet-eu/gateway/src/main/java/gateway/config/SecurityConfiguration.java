@@ -21,6 +21,8 @@ public class SecurityConfiguration {
             "/api/v1/register",   // 注册接口
             "/health",            // 健康检查
             "/favicon.ico",        // 静态资源
+            "/service/auth/login",  // 原始请求
+            "/login", // rewritePath 后路径
             "/service/business/foo/exception",  // 原始请求
             "/foo/exception" // rewritePath 后路径
     };

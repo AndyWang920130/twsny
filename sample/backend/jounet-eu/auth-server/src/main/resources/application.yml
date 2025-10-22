@@ -6,7 +6,7 @@ logging:
     org.springframework.security: trace
 spring:
   profiles:
-    active: test
+    active: dev
   security:
     user:
       name: user

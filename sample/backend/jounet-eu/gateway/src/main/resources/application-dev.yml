@@ -4,12 +4,31 @@ logging:
     org.springframework.security.web.server.authorization: DEBUG
 
 server:
-  port: 8085
+  port: 8080
 
+#resilience4j:
+#  circuitbreaker:
+#    instances:
+#      business:
+#        timeoutDuration: 5S  # 超时时间
+#        failureRateThreshold: 60 #失败率，错误率达到或高于该值则进入open状态
+#        slowCallDurationThreshold: 10s #慢调用阀值，请求执行的时间大于该值时会标记为慢调用
+#        slowCallRateThreshold: 100 #慢调用熔断阀值，当慢调用率达到或高于该值时，进入open状态
+#        slidingWindowSize: 10 #状态滚动收集器大小，close状态时收集多少请求状态，用于计算失败率。10次调用有60%的失败，则开启熔断
+#        slidingWindowType: COUNT_BASED #状态收集器类型 COUNT_BASED：根据数量计算，slidingWindowSize为次数 TIME_BASED：根据时间计算，slidingWindowSize为秒数
+#        minimumNumberOfCalls: 5 #计算错误率的最小请求数，不足最小调用次数不会触发任何变化。
+#        automaticTransitionFromOpenToHalfOpenEnabled: false #是否自动进入halfOpen状态，默认false-一定时间后进入halfopen，ture-需要通过接口执行。
+#        permittedNumberOfCallsInHalfOpenState: 5 #进入halfOpen状态时，可以被调用次数, 计算这些请求的失败率，低于设置的失败率变为close状态，否则变为open。
+#        waitDurationInOpenState: 10s #open状态变为half状态需要等待的时间，即熔断多久后开始尝试访问被熔断的服务。
+#        eventConsumerBufferSize: 10 #事件缓冲区大小？？
+#        recordExceptions: #被计为失败的异常集合，默认情况下所有异常都为失败。
+#          - java.lang.Exception
+#        ignoreExceptions: #不会被计为失败的异常集合，优先级高于recordExceptions。
+#          - java.lang.IllegalStateException
 resilience4j:
   circuitbreaker:
-    instances:
-      business:
+    configs:
+      default:    #默认配置
         timeoutDuration: 5S  # 超时时间
         failureRateThreshold: 60 #失败率，错误率达到或高于该值则进入open状态
         slowCallDurationThreshold: 10s #慢调用阀值，请求执行的时间大于该值时会标记为慢调用
@@ -25,7 +44,14 @@ resilience4j:
           - java.lang.Exception
         ignoreExceptions: #不会被计为失败的异常集合，优先级高于recordExceptions。
           - java.lang.IllegalStateException
+    instances:
+      auth:
+        baseConfig: default # 使用 default 默认配置
+        failureRateThreshold: 40 # 覆盖差异部分
+      business:
+        baseConfig: default # 使用 default 默认配置
 request:
   forward:
     url:
-      business: 'http://localhost:8085'
+      authServer: 'http://localhost:9000'
+      business: 'http://localhost:8081'

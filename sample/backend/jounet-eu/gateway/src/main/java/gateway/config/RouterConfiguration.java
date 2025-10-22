@@ -39,19 +39,26 @@ public class RouterConfiguration {
                 .route("rewrite_route", r -> r.host("*.rewrite.org")
                         .filters(f -> f.rewritePath("/foo/(?<segment>.*)", "/${segment}"))
                         .uri("https://httpbin.org"))
-                .route("path_route", r -> r.path("/service/business/**")
-                        .filters(f -> f
-                                .stripPrefix(1) //去掉第一个路径前缀
-                                .rewritePath("/business/(?<segment>.*)", "/${segment}")
-                                .circuitBreaker(c -> c.setName("business").setFallbackUri("forward:/fallback").addStatusCode("500"))
-                        )
-                        .uri(uriConfiguration.getBusiness()))
                 .route("circuit_breaker_route", r -> r.host("*.circuitbreaker.org")
                         .filters(f -> f.circuitBreaker(c -> c.setName("slowcmd")))
                         .uri("https://httpbin.org"))
                 .route("circuit_breaker_fallback_route", r -> r.host("*.circuitbreakerfallback.org")
                         .filters(f -> f.circuitBreaker(c -> c.setName("business").setFallbackUri("forward:/fallback")))
                         .uri("https://httpbin.org"))
+                .route("auth_route", r -> r.path("/service/auth/**")
+                        .filters(f -> f
+                                .stripPrefix(1) //去掉第一个路径前缀
+                                .rewritePath("/auth/(?<segment>.*)", "/${segment}")
+                                .circuitBreaker(c -> c.setName("auth").setFallbackUri("forward:/fallback").addStatusCode("500"))
+                        )
+                        .uri(uriConfiguration.getAuthServer()))
+                .route("business_route", r -> r.path("/service/business/**")
+                        .filters(f -> f
+                                .stripPrefix(1) //去掉第一个路径前缀
+                                .rewritePath("/business/(?<segment>.*)", "/${segment}")
+                                .circuitBreaker(c -> c.setName("business").setFallbackUri("forward:/fallback").addStatusCode("500"))
+                        )
+                        .uri(uriConfiguration.getBusiness()))
                 .build();
     }
 }

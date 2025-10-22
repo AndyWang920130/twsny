@@ -24,4 +24,15 @@ class UriConfiguration {
     public void setBusiness(String business) {
         this.business = business;
     }
+
+    private String authServer;
+
+    public String getAuthServer() {
+        return authServer;
+    }
+
+    public void setAuthServer(String authServer) {
+        this.authServer = authServer;
+    }
 }
+
